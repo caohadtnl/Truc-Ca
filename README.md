@@ -1,5 +1,16 @@
-# Báo cáo trực ca Tuần hoàn – Clo
-
-- Mặc định: Kíp B.
-- Icon iPhone: apple-touch-icon.png, nền cam phủ kín, không bo góc trong ảnh.
-- Có ?v=2 để hạn chế Safari dùng icon cache cũ.
+{
+  "name": "Báo cáo trực ca",
+  "short_name": "Báo cáo ca",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff9f1",
+  "theme_color": "#d97706",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
