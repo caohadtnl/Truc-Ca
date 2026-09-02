@@ -65,7 +65,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </style>
 </head>
 <body>
-<header class="topbar">Báo cáo trực ca Tuần Hoàn – Clo - Bãi Xỉ</header>
+<header class="topbar">Báo cáo trực ca Tuần hoàn – Clo</header>
 
 <main class="app" id="app">
   <div class="tabs">
@@ -272,7 +272,6 @@ return `
     <div><label class="field">Clo cấp nhánh</label><select data-f="chlorineSupply"><option value="">-- Chọn --</option><option>A</option><option>B</option></select></div>
     <div><label class="field">Bộ định lượng</label><div class="checks">${["A","B","C","D"].map(x=>`<label class="choice"><input type="checkbox" data-f="meter" value="${x}">${x}</label>`).join("")}</div></div>
     <div><label class="field">Xả xuống kênh</label><div class="checks">${U.map(x=>`<label class="choice"><input type="checkbox" data-f="channel" value="${x}">${x}</label>`).join("")}</div></div>
-    <div><label class="field">Tình trạng nhánh clo hoạt động</label><div class="checks">${["A","B","C","D"].map(x=>`<label class="choice"><input type="checkbox" data-f="activeBranch" value="${x}">${x}</label>`).join("")}</div></div>
     <div><label class="field">Bơm tăng áp nước biển</label><div class="checks">${["A","B","C","D","Không hoạt động"].map(x=>`<label class="choice"><input type="checkbox" data-f="booster" value="${x}">${x}</label>`).join("")}</div></div>
   </div>
 
@@ -376,13 +375,11 @@ function vnDate(s){
   return a.length===3 ? `${a[2]}/${a[1]}/${a[0]}` : s;
 }
 function chlorineDetail(p){
-  const active=checked(p,"activeBranch");
   const meter=checked(p,"meter");
   const channel=checked(p,"channel");
   const supply=val(p,"chlorineSupply");
-  const branches=active.length ? active : (supply ? [supply] : []);
   const parts=[];
-  if(branches.length) parts.push(`đang chạy clo nhánh cấp ${branches.join(", ")}`);
+  if(supply) parts.push(`đang chạy clo nhánh cấp ${supply}`);
   if(meter.length) parts.push(`qua bộ định lượng ${meter.join(", ")}`);
   if(channel.length) parts.push(`xả châm liên tục xuống kênh ${channel.join(", ")}`);
   return parts.join(" ");
