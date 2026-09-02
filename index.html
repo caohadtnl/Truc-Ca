@@ -170,13 +170,13 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
         <h2 class="card-title" style="margin:0" id="reportTitle">Báo cáo Email PXVH</h2>
         <div class="report-view-toggle">
           <button class="btn soft" type="button" id="btnShowMail">Mẫu Mail</button>
-          <button class="btn soft" type="button" id="btnShowGroup">Mẫu Group Kíp</button>
+          <button class="btn soft" type="button" id="btnShowGroup">Mẫu Group Ca</button>
         </div>
       </div>
       <textarea id="reportText" class="report" readonly></textarea>
       <div class="actions" style="margin-top:10px">
         <button class="btn primary" type="button" id="copyMailReport">Sao chép gửi Mail</button>
-        <button class="btn success" type="button" id="copyGroupReport">Sao chép gửi Group Kíp</button>
+        <button class="btn success" type="button" id="copyGroupReport">Sao chép gửi Group Ca PXVH</button>
         <button class="btn danger" type="button" id="newShift">Bắt đầu ca mới</button>
       </div>
       <div id="status" class="status" aria-live="polite"></div>
@@ -530,7 +530,7 @@ ${issues}`;
 
 function renderReport(){
   if(currentReportType==="group"){
-    $("#reportTitle").textContent = "Báo cáo Group Kíp";
+    $("#reportTitle").textContent = "Báo cáo Group Ca PXVH";
     $("#reportText").value = buildGroupReport();
   }else{
     $("#reportTitle").textContent = "Báo cáo Email PXVH";
@@ -563,7 +563,7 @@ $("#copyMailReport").addEventListener("click",async()=>{
 $("#copyGroupReport").addEventListener("click",async()=>{
   currentReportType="group";
   renderReport();
-  await copyText($("#reportText").value, "Đã sao chép nội dung gửi Group Kíp.");
+  await copyText($("#reportText").value, "Đã sao chép nội dung gửi Group Ca.");
 });
 
 function syncBoosterChoices(box){
