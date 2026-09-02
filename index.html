@@ -45,8 +45,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .checks{display:flex;flex-wrap:wrap;gap:7px}
 .choice{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:white;border-radius:11px;padding:8px 11px;min-height:44px;font-weight:700;color:#334155}
 .choice input{width:19px;height:19px;min-height:19px;margin:0}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:white;border-radius:11px;min-height:44px;padding:9px 13px;font-weight:800;color:#334155}
+.btn{border:1px solid var(--line);background:white;border-radius:11px;min-height:44px;padding:9px 10px;font-weight:800;color:#334155;text-align:center;display:inline-flex;align-items:center;justify-content:center}
 .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
 .btn.success{background:#16794c;border-color:#16794c;color:white}
 .btn.soft{background:var(--soft);border-color:#fed7aa;color:var(--blue)}
@@ -55,7 +54,19 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .hidden{display:none!important}
 .report{min-height:500px;font-family:inherit;line-height:1.5}
 .quickbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
-.report-view-toggle{display:flex;gap:6px;margin-bottom:10px}
+.report-view-toggle{display:flex;gap:6px}
+
+/* Bố cục nút bấm: 2 nút sao chép chia đôi hàng trên, nút ca mới trải dài ở dưới */
+.report-btn-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.btn-span-all{
+  grid-column: 1 / -1;
+}
+
 @media(max-width:640px){
  .app{padding:10px 9px 70px}
  .header{border-radius:15px;padding:15px}
@@ -64,6 +75,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
  .num4 input{font-size:14px;padding:8px 2px}
  .head4{font-size:11px}
  .card{padding:13px}
+ .btn{font-size:13.5px;padding:9px 4px}
 }
 </style>
 </head>
@@ -166,7 +178,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 
   <section data-page="report" class="hidden">
     <div class="card">
-      <div class="actions" style="justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <h2 class="card-title" style="margin:0" id="reportTitle">Báo cáo Email PXVH</h2>
         <div class="report-view-toggle">
           <button class="btn soft" type="button" id="btnShowMail">Mẫu Mail</button>
@@ -174,10 +186,12 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
         </div>
       </div>
       <textarea id="reportText" class="report" readonly></textarea>
-      <div class="actions" style="margin-top:10px">
-        <button class="btn primary" type="button" id="copyMailReport">Sao chép gửi Mail</button>
-        <button class="btn success" type="button" id="copyGroupReport">Sao chép gửi Group Ca PXVH</button>
-        <button class="btn danger" type="button" id="newShift">Bắt đầu ca mới</button>
+      
+      <!-- Cụm nút bấm được bố trí dạng lưới 2 cột cân xứng -->
+      <div class="report-btn-grid">
+        <button class="btn primary" type="button" id="copyMailReport">Chép gửi Mail</button>
+        <button class="btn success" type="button" id="copyGroupReport">Chép gửi Group</button>
+        <button class="btn danger btn-span-all" type="button" id="newShift">Bắt đầu ca mới</button>
       </div>
       <div id="status" class="status" aria-live="polite"></div>
     </div>
