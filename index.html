@@ -33,10 +33,11 @@ button{cursor:pointer}
 .card-title{font-size:17px;font-weight:800;margin:0 0 13px}
 .section-label{font-size:13px;color:var(--muted);font-weight:700;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.02em}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 label.field{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;font-weight:600}
 input,select,textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:11px;color:var(--text);min-height:46px;padding:10px 11px;font-size:16px;outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
+input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(217,119,6,.15)}
 textarea{min-height:105px;resize:vertical;line-height:1.45}
 .metric{margin-top:12px}
 .head4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
@@ -47,18 +48,18 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{border:1px solid var(--line);background:white;border-radius:11px;min-height:44px;padding:9px 13px;font-weight:800;color:#334155}
 .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
-.btn.soft{background:var(--soft);border-color:#cfe0ff;color:var(--blue)}
+.btn.success{background:#16794c;border-color:#16794c;color:white}
+.btn.soft{background:var(--soft);border-color:#fed7aa;color:var(--blue)}
 .btn.danger{color:var(--danger)}
 .status{font-size:13px;margin-top:8px;color:var(--ok);font-weight:700}
 .hidden{display:none!important}
-.report{min-height:520px;font-family:inherit;line-height:1.6}
+.report{min-height:500px;font-family:inherit;line-height:1.6}
 .quickbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
-.badge{font-size:12px;font-weight:800;border-radius:999px;padding:5px 9px;background:#edf6f1;color:var(--ok)}
-.warn{color:var(--warn);font-weight:700}
+.report-view-toggle{display:flex;gap:6px;margin-bottom:10px}
 @media(max-width:640px){
  .app{padding:10px 9px 70px}
  .header{border-radius:15px;padding:15px}
- .grid2{grid-template-columns:1fr}
+ .grid2,.grid3{grid-template-columns:1fr}
  .grid4{gap:4px}
  .num4 input{font-size:14px;padding:8px 2px}
  .head4{font-size:11px}
@@ -70,7 +71,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 <main class="app" id="app">
   <div class="header">
     <h1>Báo cáo trực ca Tuần hoàn – Clo</h1>
-    <p>NMNĐ Quảng Trạch · Nhập nhanh → tạo báo cáo → sao chép gửi mail</p>
+    <p>NMNĐ Quảng Trạch · Nhập nhanh → tạo báo cáo Mail & Group Kíp</p>
   </div>
 
   <div class="tabs">
@@ -78,8 +79,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
     <button class="tab" type="button" data-tab="receive">Nhận ca</button>
     <button class="tab" type="button" data-tab="during">Trong ca</button>
     <button class="tab" type="button" data-tab="handover">Giao ca</button>
-    <button class="tab" type="button" data-tab="report">Báo cáo mail</button>
-    <button class="tab" type="button" data-tab="kipGroup">Group Kíp</button>
+    <button class="tab" type="button" data-tab="report">Báo cáo</button>
   </div>
 
   <section data-page="general">
@@ -95,9 +95,9 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
         </div>
         <div><label class="field">Loại ca</label>
           <select id="shift">
-            <option value="Sáng|06h00-14h00">Sáng · 06h00–14h00</option>
-            <option value="Chiều|14h00-22h00">Chiều · 14h00–22h00</option>
-            <option value="Khuya|22h00-06h00">Khuya · 22h00–06h00</option>
+            <option value="Sáng|07h00-15h00">Sáng · 07h00–15h00</option>
+            <option value="Chiều|15h00-23h00">Chiều · 15h00–23h00</option>
+            <option value="Khuya|23h00-07h00">Khuya · 23h00–07h00</option>
           </select>
         </div>
         <div><label class="field">Thời gian</label><input id="shiftTime" readonly></div>
@@ -109,12 +109,12 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
     </div>
 
     <div class="card">
-      <h2 class="card-title">3. Bất thường ca trước</h2>
-      <textarea id="previousAbnormal" placeholder="Để trống nếu không có. Mỗi nội dung một dòng."></textarea>
+      <h2 class="card-title">3. Bất thường ca trước / Thao tác ca trước</h2>
+      <textarea id="previousAbnormal" placeholder="Mỗi nội dung một dòng."></textarea>
     </div>
 
     <div class="card">
-      <h2 class="card-title">4. Tồn tại</h2>
+      <h2 class="card-title">4. Tồn tại / Bất thường tồn đọng</h2>
       <textarea id="issues" placeholder="Mỗi tồn tại một dòng."></textarea>
       <div class="actions" style="margin-top:10px">
         <button class="btn soft" id="copyIssuesToFinal" type="button">Chép Tồn tại → mục IV</button>
@@ -170,12 +170,16 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
   <section data-page="report" class="hidden">
     <div class="card">
       <div class="actions" style="justify-content:space-between;align-items:center;margin-bottom:10px">
-        <h2 class="card-title" style="margin:0">Báo cáo hoàn chỉnh</h2>
-        <span class="badge">Đúng cấu trúc mẫu</span>
+        <h2 class="card-title" style="margin:0" id="reportTitle">Báo cáo Email PXVH</h2>
+        <div class="report-view-toggle">
+          <button class="btn soft" type="button" id="btnShowMail">Mẫu Mail</button>
+          <button class="btn soft" type="button" id="btnShowGroup">Mẫu Group Kíp</button>
+        </div>
       </div>
       <textarea id="reportText" class="report" readonly></textarea>
       <div class="actions" style="margin-top:10px">
-        <button class="btn primary" type="button" id="copyReport">Sao chép toàn bộ</button>
+        <button class="btn primary" type="button" id="copyMailReport">Sao chép gửi Mail</button>
+        <button class="btn success" type="button" id="copyGroupReport">Sao chép gửi Group Kíp</button>
         <button class="btn danger" type="button" id="newShift">Bắt đầu ca mới</button>
       </div>
       <div id="status" class="status" aria-live="polite"></div>
@@ -212,34 +216,40 @@ return `
   <div class="metric">
     <label class="field">Mức nước đầu kênh 1A/1B/2A/2B (m)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="level">`).join("")}</div>
+    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="level" placeholder="">`).join("")}</div>
   </div>
 
   <div class="section-label">Lưới chắn rác</div>
-  <div class="grid2">
+  <div class="grid3">
     <div><label class="field">Lưới quay</label>
       <select data-f="screen"><option value="stop">Đang dừng</option><option value="run">Đang chạy</option></select>
     </div>
     <div><label class="field">Bơm rửa lưới</label>
-      <select data-f="wash"><option value="stop">Không hoạt động</option><option value="run">Đang chạy</option></select>
+      <select data-f="washState"><option value="stop">Dừng / Không hoạt động</option><option value="run">Đang hoạt động</option></select>
     </div>
     <div><label class="field">Máy cào rác</label>
       <select data-f="rake"><option>Không hoạt động</option><option>Đang hoạt động</option></select>
     </div>
   </div>
+
   <div class="metric hidden" data-screen-units>
     <label class="field">Lưới quay đang chạy</label>
     <div class="checks">${U.map(u=>`<label class="choice"><input type="checkbox" data-f="screenUnit" value="${u}">${u}</label>`).join("")}</div>
   </div>
-  <div class="metric hidden" data-wash-units>
-    <label class="field">Bơm rửa lưới đang chạy</label>
-    <div class="checks">
-      <label class="choice"><input type="checkbox" data-f="washPump" value="A">Bơm A</label>
-      <label class="choice"><input type="checkbox" data-f="washPump" value="B">Bơm B</label>
-    </div>
-    <div class="metric">
-      <label class="field">Áp suất bơm rửa lưới (MPa)</label>
-      <input inputmode="decimal" data-decimal data-f="washPressure" placeholder="Nhập áp suất">
+
+  <div class="metric hidden" data-wash-details style="background:var(--soft);padding:10px;border-radius:10px;border:1px dashed var(--line);margin-top:10px">
+    <div class="grid2">
+      <div>
+        <label class="field">Bơm rửa lưới đang chạy</label>
+        <div class="checks">
+          <label class="choice"><input type="checkbox" data-f="washPump" value="A">Bơm A</label>
+          <label class="choice"><input type="checkbox" data-f="washPump" value="B">Bơm B</label>
+        </div>
+      </div>
+      <div>
+        <label class="field">Áp suất bơm rửa lưới (MPa)</label>
+        <input inputmode="decimal" data-decimal data-f="washPressure" placeholder="Ví dụ: 0.25">
+      </div>
     </div>
   </div>
 
@@ -252,7 +262,7 @@ return `
   <div class="metric">
     <label class="field">Áp suất dầu thủy lực van CNRV 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="hp">`).join("")}</div>
+    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="hp" placeholder="">`).join("")}</div>
   </div>
   <div class="metric">
     <label class="field">Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B (°C)</label>
@@ -295,10 +305,10 @@ return `
   </div>
 
   <div class="grid2 metric">
-    <div><label class="field">Hệ thống trung hòa clo</label><select data-f="neutral"><option>Dừng</option><option>Đang chạy</option></select></div>
-    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="decimal" data-decimal data-f="naoh" placeholder="Ví dụ: 1594"></div>
+    <div><label class="field">Hệ thống trung hòa clo</label><select data-f="neutral"><option>Dừng / Không hoạt động</option><option>Đang chạy</option></select></div>
+    <div><label class="field">Khối lượng NaOH trong bể chứa (mm hoặc m)</label><input inputmode="decimal" data-decimal data-f="naoh" placeholder="Ví dụ: 1594 mm hoặc 1.590m"></div>
     <div><label class="field">Hệ thống bơm nước hồi</label><select data-f="returnPump"><option>Ngừng</option><option>Đang chạy</option></select></div>
-    <div><label class="field">Mức nước bể hồi A/B (m)</label><div class="grid2"><input inputmode="decimal" data-decimal data-f="tankA" value="0"><input inputmode="decimal" data-decimal data-f="tankB" value="0"></div></div>
+    <div><label class="field">Mức nước bể hồi A/B</label><div class="grid2"><input inputmode="text" data-f="tankA" placeholder="Bể A (m hoặc mm)"><input inputmode="text" data-f="tankB" placeholder="Bể B (m hoặc mm)"></div></div>
   </div>
 </div>`;
 }
@@ -309,6 +319,7 @@ $("#handoverMount").innerHTML = phaseHTML("III. Giao ca");
 const receivePhase = $("#receiveMount .phase");
 const handoverPhase = $("#handoverMount .phase");
 let handoverInitialized=false;
+let currentReportType="mail";
 
 function normalizeDecimal(v){
   let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");
@@ -319,19 +330,18 @@ function normalizeDecimal(v){
 function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDecimal(e.value))}
 function val(box,f){const e=$(`[data-f="${f}"]`,box);return e ? e.value.trim() : ""}
 function checked(box,f){return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.value)}
-function setChecked(box,f,arr){$$(`input[data-f="${f}"]`,box).forEach(e=>e.checked=arr.includes(e.value))}
-function phaseSyncScreen(box){
-  const state=$('[data-f="screen"]',box), unitBox=$('[data-screen-units]',box);
-  const sync=()=>unitBox.classList.toggle("hidden",state.value!=="run");
-  state.addEventListener("change",sync); sync();
+
+function setupDynamicPhaseEvents(box){
+  const screenState=$('[data-f="screen"]',box), screenUnits=$('[data-screen-units]',box);
+  const syncScreen=()=>screenUnits.classList.toggle("hidden",screenState.value!=="run");
+  screenState.addEventListener("change",syncScreen); syncScreen();
+
+  const washState=$('[data-f="washState"]',box), washDetails=$('[data-wash-details]',box);
+  const syncWash=()=>washDetails.classList.toggle("hidden",washState.value!=="run");
+  washState.addEventListener("change",syncWash); syncWash();
 }
-function phaseSyncWash(box){
-  const state=$('[data-f="wash"]',box), unitBox=$('[data-wash-units]',box);
-  const sync=()=>unitBox.classList.toggle("hidden",state.value!=="run");
-  state.addEventListener("change",sync); sync();
-}
-phaseSyncScreen(receivePhase); phaseSyncScreen(handoverPhase);
-phaseSyncWash(receivePhase); phaseSyncWash(handoverPhase);
+setupDynamicPhaseEvents(receivePhase);
+setupDynamicPhaseEvents(handoverPhase);
 
 function setCurrentDateIfEmpty(){
   if($("#workDate").value) return;
@@ -389,23 +399,19 @@ function chlorineDetail(p){
   const meter=checked(p,"meter");
   const channel=checked(p,"channel");
   const supply=val(p,"chlorineSupply");
-  const parts=[];
   const branches=active.length ? active : (supply ? [supply] : []);
-  if(branches.length) parts.push(`Đang chạy nhánh ${branches.join(", ")}`);
-  if(meter.length) parts.push(`bộ định lượng ${meter.join(", ")}`);
-  if(channel.length) parts.push(`xả xuống kênh ${channel.join(", ")}`);
-  return parts.join(", ");
+  const parts=[];
+  if(branches.length) parts.push(`đang chạy clo nhánh cấp ${branches.join(", ")}`);
+  if(meter.length) parts.push(`qua bộ định lượng ${meter.join(", ")}`);
+  if(channel.length) parts.push(`xả châm liên tục xuống kênh ${channel.join(", ")}`);
+  return parts.join(" ");
 }
 function cylinders(p){
   const total=val(p,"totalCylinder"), remain=val(p,"remainingCylinder");
-  if(total && remain) return `${total}(${remain} bình còn clo)`;
+  if(total && remain) return `${remain}/${total}`;
+  if(remain) return remain;
   if(total) return total;
-  if(remain) return `(${remain} bình còn clo)`;
   return "";
-}
-function ppmText(p){
-  const a=vals(p,"ppm");
-  return a.join("/");
 }
 function reportNum(v){ return String(v??"").replace(/\./g,","); }
 function reportVals(p,f){ return vals(p,f).map(reportNum); }
@@ -416,64 +422,54 @@ function boosterText(p){
   return `đang chạy bơm ${a.join(", ")}`;
 }
 function washText(p){
-  const state=val(p,"wash");
-  if(state!=="run") return "Không hoạt động";
+  const st=val(p,"washState");
+  if(st!=="run") return "dừng";
   const pumps=checked(p,"washPump");
-  const pressure=reportNum(normalizeDecimal(val(p,"washPressure")));
-  const pumpText=pumps.length ? `bơm ${pumps.join(", ")}` : "chưa chọn bơm";
-  return `${pumpText}${pressure ? `, áp suất ${pressure} MPa` : ""}`;
+  const press=val(p,"washPressure");
+  let res="Đang hoạt động";
+  if(pumps.length) res+=` bơm ${pumps.join(", ")}`;
+  if(press) res+=`, áp suất: ${reportNum(press)} MPa`;
+  return res;
 }
 function phaseText(p){
   const cwp=checked(p,"cwp");
   const screenState=val(p,"screen");
   const screenUnits=checked(p,"screenUnit");
   const screen=screenState==="run"
-    ? `đang chạy${screenUnits.length ? " "+screenUnits.join(", ") : ""}`
+    ? `đang chạy lưới quay${screenUnits.length ? " "+screenUnits.join(", ") : ""}`
     : "đang dừng";
   const chlorineState=val(p,"chlorineState");
   const chlorine=chlorineDetail(p);
+  const tankA=val(p,"tankA")||"0";
+  const tankB=val(p,"tankB")||"0";
 
-  return [
-`- Hệ thống bơm tuần hoàn: ${cwp.length ? "bơm "+cwp.map((x,i)=>(i===0?"CWP ":"")+x).join(", ")+" chạy" : "Đang dừng"}`,
+  let cwpStr = cwp.length ? `chạy bơm tuần hoàn ${cwp.map(x=>"CWP "+x).join(", ")}` : "Đang dừng";
+  let cwpDis = reportVals(p,"dis").filter(Boolean).join("/") || "";
+  if(cwpDis && !cwpDis.toLowerCase().includes("mpa")) cwpDis += " MPa";
+
+  const lines = [
+`- Hệ thống bơm tuần hoàn: ${cwpStr}`,
 `- Mức nước đầu kênh 1A/1B/2A/2B: ${reportVals(p,"level").join("/")}m`,
 `- Tình trạng hoạt động của lưới quay: ${screen}`,
 `- Tình trạng hoạt động của bơm rửa lưới: ${washText(p)}`,
 `- Tình trạng hoạt động của máy cào rác: ${val(p,"rake")}`,
-`- Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B: ${reportVals(p,"dis").join("/")} MPa`,
-`- Áp suất hệ thống dầu thủy lực van CNRV 1A/1B/2A/2B: ${reportVals(p,"hp").join("/")} MPa.`,
-`- Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B: ${reportVals(p,"temp").join("/")} độ C.`,
-`- Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B: ${reportVals(p,"oil").join("/")} Lít.`,
-`- Bơm dầu thủy lực van CNRV 1A/1B/2A/2B: bơm ${$$('[data-f="oilPump"]',p).map(x=>x.value).join("/")}`,
-`- Hệ thống nhà clo: ${chlorineState}${chlorineState ? "." : ""}`,
-`- Tình trạng nhánh clo hoạt động: ${chlorine}`,
-`- Tình trạng bơm tăng áp nước biển: ${boosterText(p)}`,
-`- Số lượng bình clo trong nhà clo: ${cylinders(p)}`,
-`- Nồng độ châm clo 1A/1B/2A/2B: ${reportVals(p,"ppm").join("/")}ppm.`,
-`- Hệ thống trung hòa clo: ${val(p,"neutral")}.`,
-`- Khối lượng NaOH trong bể chứa: ${reportNum(normalizeDecimal(val(p,"naoh")))}${val(p,"naoh") ? "mm." : ""}`,
-`- Hệ thống bơm nước hồi: ${val(p,"returnPump")}.`,
-`- Mức nước bể hồi A/B: ${reportNum(normalizeDecimal(val(p,"tankA")))}/${reportNum(normalizeDecimal(val(p,"tankB")))}m.`
-  ].join("\n\n");
-}
-function buildKipGroupReport(){
-  const [shiftName]= $("#shift").value.split("|");
-  const staff=$("#staff").value.trim();
-  const prev=bullets($("#previousAbnormal").value);
-  const issues=bullets($("#issues").value);
-
-  $("#kipGroupText").value =
-`Báo cáo TC, Tklm, Mt: Tình hình thiết bị vận hành HV Trạm tuần hoàn, clo - Trạm nước lắng , hồi (Kíp ${$("#kip").value}) đầu ca ${shiftName} ngày ${vnDate($("#workDate").value)} (từ ${$("#shiftTime").value}) như sau:
-I. Nhận ca:
-1. Nhân sự: ${staff}
-2. Tình trạng thiết bị đầu ca.
-${phaseText(receivePhase)}
-Thao tác ca trước:
-${prev}
-4. Tình trạng bất thường tồn đọng của thiết bị.
-${issues}`;
+`- Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B: ${cwpDis}`,
+`- Áp suất hệ thống dầu thủy lực van CNRV 1A/1B/2A/2B: ${reportVals(p,"hp").join("/")} MPa`,
+`- Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B: ${reportVals(p,"temp").join("/")}`,
+`- Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B: ${reportVals(p,"oil").join("/")} lít`,
+`- Bơm dầu thủy lực van CNRV 1A/1B/2A/2B: Bơm ${$$('[data-f="oilPump"]',p).map(x=>x.value).join("/")}`,
+`- Hệ thống nhà clo: ${chlorine || chlorineState}`,
+`- Nồng độ châm clo tại kênh 1A/1B/2A/2B: ${reportVals(p,"ppm").join("/")}`,
+`- Hệ thống trung hòa clo: ${val(p,"neutral")}`,
+`- Khối lượng NaOH trong bể chứa: ${val(p,"naoh") ? val(p,"naoh") : ""}`,
+`- Hệ thống bơm nước hồi: ${val(p,"returnPump")}`,
+`- Mức bể nước thu hồi A/B: ${tankA}/${tankB}`,
+`- Số bình clo còn: ${cylinders(p)}`
+  ];
+  return lines.join("\n\n");
 }
 
-function buildReport(){
+function buildMailReport(){
   const [shiftName]= $("#shift").value.split("|");
   const prev=bullets($("#previousAbnormal").value);
   const issues=bullets($("#issues").value);
@@ -481,8 +477,7 @@ function buildReport(){
   const staff=$("#staff").value.trim();
   const during=$("#duringText").value.trim();
 
-  $("#reportText").value =
-`Kính gửi: Lãnh đạo PXVH – NMNĐ Quảng Trạch.
+  return `Kính gửi: Lãnh đạo PXVH – NMNĐ Quảng Trạch.
 
            Cc: CBNV PXVH – NMNĐ Quảng Trạch.
 
@@ -523,36 +518,63 @@ Kính báo cáo.
 Trân trọng./.`;
 }
 
-$("#copyReport").addEventListener("click",async()=>{
-  buildReport();
-  const text=$("#reportText").value;
+function buildGroupReport(){
+  const [shiftName]= $("#shift").value.split("|");
+  const prev=bullets($("#previousAbnormal").value);
+  const issues=bullets($("#issues").value);
+  const staff=$("#staff").value.trim();
+
+  return `Báo cáo TC, TKLM, MT: Tình hình thiết bị vận hành HV Trạm tuần hoàn, clo - Trạm nước lắng , hồi (Kíp ${$("#kip").value}) đầu ca ${shiftName} ngày ${vnDate($("#workDate").value)} (từ ${$("#shiftTime").value}) như sau:
+
+I. Nhận ca:
+1. Nhân sự: ${staff}
+
+2. Tình trạng thiết bị đầu ca:
+${phaseText(receivePhase)}
+
+Thao tác ca trước:
+${prev}
+
+4. Tình trạng bất thường tồn đọng của thiết bị:
+${issues}`;
+}
+
+function renderReport(){
+  if(currentReportType==="group"){
+    $("#reportTitle").textContent = "Báo cáo Group Kíp";
+    $("#reportText").value = buildGroupReport();
+  }else{
+    $("#reportTitle").textContent = "Báo cáo Email PXVH";
+    $("#reportText").value = buildMailReport();
+  }
+}
+
+$("#btnShowMail").addEventListener("click",()=>{currentReportType="mail";renderReport();});
+$("#btnShowGroup").addEventListener("click",()=>{currentReportType="group";renderReport();});
+
+async function copyText(text, msg){
   let ok=false;
   try{
     if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); ok=true; }
   }catch(e){}
   if(!ok){
+    $("#reportText").value = text;
     $("#reportText").focus(); $("#reportText").select();
     try{ ok=document.execCommand("copy"); }catch(e){}
   }
-  $("#status").textContent=ok ? "Đã sao chép toàn bộ báo cáo." : "Đã chọn toàn bộ nội dung — hãy chọn Copy.";
+  $("#status").textContent=ok ? msg : "Đã chọn toàn bộ nội dung — hãy chọn Copy.";
+}
+
+$("#copyMailReport").addEventListener("click",async()=>{
+  currentReportType="mail";
+  renderReport();
+  await copyText($("#reportText").value, "Đã sao chép nội dung gửi Email.");
 });
 
-$("#copyKipGroup").addEventListener("click",async()=>{
-  buildKipGroupReport();
-  const text=$("#kipGroupText").value;
-  let ok=false;
-  try{
-    if(navigator.clipboard && window.isSecureContext){
-      await navigator.clipboard.writeText(text); ok=true;
-    }
-  }catch(e){}
-  if(!ok){
-    $("#kipGroupText").focus(); $("#kipGroupText").select();
-    try{ ok=document.execCommand("copy"); }catch(e){}
-  }
-  $("#kipGroupStatus").textContent=ok
-    ? "Đã sao chép — có thể dán lên Group Kíp."
-    : "Đã chọn toàn bộ nội dung — hãy chọn Copy.";
+$("#copyGroupReport").addEventListener("click",async()=>{
+  currentReportType="group";
+  renderReport();
+  await copyText($("#reportText").value, "Đã sao chép nội dung gửi Group Kíp.");
 });
 
 function syncBoosterChoices(box){
@@ -576,13 +598,12 @@ $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
   }
   $$(".tab").forEach(x=>x.classList.remove("active")); btn.classList.add("active");
   $$("[data-page]").forEach(p=>p.classList.toggle("hidden",p.dataset.page!==btn.dataset.tab));
-  if(btn.dataset.tab==="report") buildReport();
-  if(btn.dataset.tab==="kipGroup") buildKipGroupReport();
+  if(btn.dataset.tab==="report") renderReport();
 }));
 
 function serializePhase(p){
   const obj={};
-  $$("[data-f]",p).forEach((e,i)=>{
+  $$("[data-f]",p).forEach((e)=>{
     const key=e.dataset.f;
     if(e.type==="checkbox"){
       if(!obj[key]) obj[key]=[];
@@ -610,6 +631,7 @@ function restorePhase(p,obj={}){
     }
   });
   $('[data-f="screen"]',p)?.dispatchEvent(new Event("change"));
+  $('[data-f="washState"]',p)?.dispatchEvent(new Event("change"));
 }
 function saveDraft(){
   try{
