@@ -116,9 +116,6 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
     <div class="card">
       <h2 class="card-title">4. Tồn tại / Bất thường tồn đọng</h2>
       <textarea id="issues" placeholder="Mỗi tồn tại một dòng."></textarea>
-      <div class="actions" style="margin-top:10px">
-        <button class="btn soft" id="copyIssuesToFinal" type="button">Chép Tồn tại → mục IV</button>
-      </div>
     </div>
   </section>
 
@@ -380,11 +377,6 @@ function clonePhase(){
   saveDraft();
 }
 $("#cloneReceive").addEventListener("click",clonePhase);
-
-$("#copyIssuesToFinal").addEventListener("click",()=>{
-  $("#finalIssues").value=$("#issues").value;
-  saveDraft();
-});
 
 function bullets(text, compact=false){
   const arr=String(text||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
