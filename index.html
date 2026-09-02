@@ -29,7 +29,6 @@ button{cursor:pointer}
 .tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
 .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px;box-shadow:0 2px 6px rgba(15,23,42,.03)}
 .card-title{font-size:16px;font-weight:800;margin:0 0 11px}
-.card-header-flex{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .section-label{font-size:13px;color:var(--muted);font-weight:700;margin:14px 0 7px;text-transform:uppercase;letter-spacing:.02em}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -45,7 +44,6 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .choice{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:white;border-radius:10px;padding:7px 10px;min-height:42px;font-weight:700;color:#334155}
 .choice input{width:18px;height:18px;min-height:18px;margin:0}
 .btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:42px;padding:8px 10px;font-weight:800;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
-.btn-sm{min-height:30px;padding:4px 8px;font-size:12px;border-radius:8px}
 .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
 .btn.success{background:#16794c;border-color:#16794c;color:white}
 .btn.soft{background:var(--soft);border-color:#fed7aa;color:var(--blue)}
@@ -67,7 +65,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </style>
 </head>
 <body>
-<header class="topbar">Báo cáo trực ca Tuần hoàn – Clo</header>
+<header class="topbar">Báo cáo trực ca Tuần Hoàn – Clo - Bãi Xỉ</header>
 
 <main class="app" id="app">
   <div class="tabs">
@@ -105,24 +103,12 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
     </div>
 
     <div class="card">
-      <div class="card-header-flex">
-        <h2 class="card-title" style="margin:0">3. Bất thường ca trước / Thao tác ca trước</h2>
-        <div style="display:flex;gap:5px">
-          <button class="btn btn-sm soft" type="button" id="savePrevTemplate">Lưu mẫu</button>
-          <button class="btn btn-sm soft" type="button" id="loadPrevTemplate">Tải mẫu</button>
-        </div>
-      </div>
+      <h2 class="card-title">3. Bất thường ca trước / Thao tác ca trước</h2>
       <textarea id="previousAbnormal" placeholder="Mỗi nội dung một dòng."></textarea>
     </div>
 
     <div class="card">
-      <div class="card-header-flex">
-        <h2 class="card-title" style="margin:0">4. Tồn tại / Bất thường tồn đọng</h2>
-        <div style="display:flex;gap:5px">
-          <button class="btn btn-sm soft" type="button" id="saveIssuesTemplate">Lưu mẫu</button>
-          <button class="btn btn-sm soft" type="button" id="loadIssuesTemplate">Tải mẫu</button>
-        </div>
-      </div>
+      <h2 class="card-title">4. Tồn tại / Bất thường tồn đọng</h2>
       <textarea id="issues" placeholder="Mỗi tồn tại một dòng."></textarea>
     </div>
   </section>
@@ -199,8 +185,6 @@ const roster = {
 };
 const U = ["1A","1B","2A","2B"];
 const STORE_KEY = "qt_shift_report_v1";
-const TEMPLATE_PREV_KEY = "qt_prev_tpl_v1";
-const TEMPLATE_ISSUES_KEY = "qt_issues_tpl_v1";
 
 const $ = (s, el=app) => el.querySelector(s);
 const $$ = (s, el=app) => [...el.querySelectorAll(s)];
@@ -381,26 +365,6 @@ function clonePhase(){
   saveDraft();
 }
 $("#cloneReceive").addEventListener("click",clonePhase);
-
-$("#savePrevTemplate").addEventListener("click",()=>{
-  localStorage.setItem(TEMPLATE_PREV_KEY,$("#previousAbnormal").value);
-  alert("Đã lưu mẫu mục 3.");
-});
-$("#loadPrevTemplate").addEventListener("click",()=>{
-  const d = localStorage.getItem(TEMPLATE_PREV_KEY);
-  if(d !== null) $("#previousAbnormal").value = d;
-  saveDraft();
-});
-
-$("#saveIssuesTemplate").addEventListener("click",()=>{
-  localStorage.setItem(TEMPLATE_ISSUES_KEY,$("#issues").value);
-  alert("Đã lưu mẫu mục 4.");
-});
-$("#loadIssuesTemplate").addEventListener("click",()=>{
-  const d = localStorage.getItem(TEMPLATE_ISSUES_KEY);
-  if(d !== null) $("#issues").value = d;
-  saveDraft();
-});
 
 function bullets(text, compact=false){
   const arr=String(text||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
