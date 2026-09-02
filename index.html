@@ -53,7 +53,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .btn.danger{color:var(--danger)}
 .status{font-size:13px;margin-top:8px;color:var(--ok);font-weight:700}
 .hidden{display:none!important}
-.report{min-height:500px;font-family:inherit;line-height:1.6}
+.report{min-height:500px;font-family:inherit;line-height:1.5}
 .quickbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
 .report-view-toggle{display:flex;gap:6px;margin-bottom:10px}
 @media(max-width:640px){
@@ -386,9 +386,10 @@ $("#copyIssuesToFinal").addEventListener("click",()=>{
   saveDraft();
 });
 
-function bullets(text){
+function bullets(text, compact=false){
   const arr=String(text||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  return arr.map(x=>"- "+x.replace(/^[-•]\s*/,"")).join("\n\n");
+  const sep = compact ? "\n" : "\n\n";
+  return arr.map(x=>"- "+x.replace(/^[-•]\s*/,"")).join(sep);
 }
 function vnDate(s){
   const a=String(s||"").split("-");
@@ -431,7 +432,7 @@ function washText(p){
   if(press) res+=`, áp suất: ${reportNum(press)} MPa`;
   return res;
 }
-function phaseText(p){
+function phaseText(p, isGroup=false){
   const cwp=checked(p,"cwp");
   const screenState=val(p,"screen");
   const screenUnits=checked(p,"screenUnit");
@@ -466,14 +467,14 @@ function phaseText(p){
 `- Mức bể nước thu hồi A/B: ${tankA}/${tankB}`,
 `- Số bình clo còn: ${cylinders(p)}`
   ];
-  return lines.join("\n\n");
+  return lines.join(isGroup ? "\n" : "\n\n");
 }
 
 function buildMailReport(){
   const [shiftName]= $("#shift").value.split("|");
-  const prev=bullets($("#previousAbnormal").value);
-  const issues=bullets($("#issues").value);
-  const final=bullets($("#finalIssues").value);
+  const prev=bullets($("#previousAbnormal").value, false);
+  const issues=bullets($("#issues").value, false);
+  const final=bullets($("#finalIssues").value, false);
   const staff=$("#staff").value.trim();
   const during=$("#duringText").value.trim();
 
@@ -489,7 +490,7 @@ I. Nhận ca:
 
 2. Tình trạng thiết bị đầu ca:
 
-${phaseText(receivePhase)}
+${phaseText(receivePhase, false)}
 
 3. Bất thường ca trước:
 
@@ -503,7 +504,7 @@ II. Trong ca: ${during}
 
 III. Giao ca:
 
-${phaseText(handoverPhase)}
+${phaseText(handoverPhase, false)}
 
 IV. Bất thường, khiếm khuyết, lưu ý:
 
@@ -520,21 +521,17 @@ Trân trọng./.`;
 
 function buildGroupReport(){
   const [shiftName]= $("#shift").value.split("|");
-  const prev=bullets($("#previousAbnormal").value);
-  const issues=bullets($("#issues").value);
+  const prev=bullets($("#previousAbnormal").value, true);
+  const issues=bullets($("#issues").value, true);
   const staff=$("#staff").value.trim();
 
   return `Báo cáo TC, TKLM, MT: Tình hình thiết bị vận hành HV Trạm tuần hoàn, clo - Trạm nước lắng , hồi (Kíp ${$("#kip").value}) đầu ca ${shiftName} ngày ${vnDate($("#workDate").value)} (từ ${$("#shiftTime").value}) như sau:
-
 I. Nhận ca:
 1. Nhân sự: ${staff}
-
 2. Tình trạng thiết bị đầu ca:
-${phaseText(receivePhase)}
-
-Thao tác ca trước:
+${phaseText(receivePhase, true)}
+3. Thao tác ca trước:
 ${prev}
-
 4. Tình trạng bất thường tồn đọng của thiết bị:
 ${issues}`;
 }
