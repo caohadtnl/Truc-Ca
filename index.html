@@ -202,18 +202,6 @@ const STORE_KEY = "qt_shift_report_v1";
 const TEMPLATE_PREV_KEY = "qt_prev_tpl_v1";
 const TEMPLATE_ISSUES_KEY = "qt_issues_tpl_v1";
 
-const DEFAULT_ISSUES = `- Thông số hệ thống clo tại đầu đẩy bơm tuần hoàn không hiển thị
-- Nhánh clo D đang bị lỗi
-- Có tiếng để động lạ tại tủ dầu điều khiển van CNRV 1A, 1B, 2B
-- Rò rỉ NaoH ở tháp hấp thụ clo
-- Hộp số lưới quay rác 2A bị bể hộp số, đang sửa chữa.
-- Lưới quay rác 2b tháo hộp số và động cơ sang lưới quay rác 1B
-- Lưới quay rác 1B đang dừng để kiểm tra
-- Rò nước tại 4 bơm tăng áp nước biển của hệ thống clo.
-- Tủ dầu điều khiển van CNRV 2B có hiện tượng tụt áp nhanh, nhiệt độ dầu cao
-- Rò rỉ nước tại mặt bích đồng hồ đo áp suất đầu đẩy bơm CWP 1B
-- Cảm biến đo độ rung gối đỡ động cơ phía NDE theo phương Y (CWP 1A) chưa lắp đặt`;
-
 const $ = (s, el=app) => el.querySelector(s);
 const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
@@ -400,7 +388,7 @@ $("#savePrevTemplate").addEventListener("click",()=>{
 });
 $("#loadPrevTemplate").addEventListener("click",()=>{
   const d = localStorage.getItem(TEMPLATE_PREV_KEY);
-  if(d!==null) $("#previousAbnormal").value=d;
+  if(d !== null) $("#previousAbnormal").value = d;
   saveDraft();
 });
 
@@ -410,7 +398,7 @@ $("#saveIssuesTemplate").addEventListener("click",()=>{
 });
 $("#loadIssuesTemplate").addEventListener("click",()=>{
   const d = localStorage.getItem(TEMPLATE_ISSUES_KEY);
-  $("#issues").value = (d!==null && d!=="") ? d : DEFAULT_ISSUES;
+  if(d !== null) $("#issues").value = d;
   saveDraft();
 });
 
@@ -666,7 +654,7 @@ function loadDraft(){
     if(d.shift) $("#shift").value=d.shift;
     $("#staff").value=d.staff||"";
     $("#previousAbnormal").value=d.previousAbnormal||"";
-    $("#issues").value = d.issues !== undefined ? d.issues : DEFAULT_ISSUES;
+    $("#issues").value = d.issues || "";
     $("#duringText").value=d.duringText||"VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
     $("#finalIssues").value=d.finalIssues||"";
     $("#handoverPeople").value=d.handoverPeople||"";
@@ -701,10 +689,7 @@ $("#newShift").addEventListener("click",()=>{
 const hadDraft=loadDraft();
 setCurrentDateIfEmpty();
 syncShift();
-if(!hadDraft){
-  syncRoster(true);
-  if(!$("#issues").value) $("#issues").value = DEFAULT_ISSUES;
-}
+if(!hadDraft) syncRoster(true);
 })();
 </script>
 </body>
