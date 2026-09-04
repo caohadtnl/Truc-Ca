@@ -317,12 +317,10 @@ function checked(box,f){return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.v
 
 function setupDynamicPhaseEvents(box){
   const screenState=$('[data-f="screen"]',box), screenUnits=$('[data-screen-units]',box);
-  const syncScreen=()=>screenUnits.classList.toggle("hidden",screenState.value!=="run");
-  screenState.addEventListener("change",syncScreen); syncScreen();
+  screenState.addEventListener("change",()=>screenUnits.classList.toggle("hidden",screenState.value!=="run"));
 
   const washState=$('[data-f="washState"]',box), washDetails=$('[data-wash-details]',box);
-  const syncWash=()=>washDetails.classList.toggle("hidden",washState.value!=="run");
-  washState.addEventListener("change",syncWash); syncWash();
+  washState.addEventListener("change",()=>washDetails.classList.toggle("hidden",washState.value!=="run"));
 }
 setupDynamicPhaseEvents(receivePhase);
 setupDynamicPhaseEvents(handoverPhase);
@@ -334,10 +332,11 @@ function setCurrentDateIfEmpty(){
   $("#workDate").value=`${y}-${m}-${day}`;
 }
 function syncShift(){ $("#shiftTime").value=$("#shift").value.split("|")[1] }
-function syncRoster(force=true){
-  const people=roster[$("#kip").value].join(", ");
-  if(force || !$("#staff").value.trim()) $("#staff").value=people;
-  if(force || !$("#handoverPeople").value.trim()) $("#handoverPeople").value=people;
+function syncRoster(force=false){
+  const currentKip = $("#kip").value;
+  const people = (roster[currentKip] || []).join(", ");
+  if(force || !$("#staff").value.trim()) $("#staff").value = people;
+  if(force || !$("#handoverPeople").value.trim()) $("#handoverPeople").value = people;
 }
 function syncReceiveRoster(){
   const k=$("#receiveKip").value;
@@ -350,7 +349,7 @@ $("#receiveKip").addEventListener("change",()=>{syncReceiveRoster();saveDraft()}
 
 $$(".phase").forEach(box=>{
   $$('[data-decimal]',box).forEach(el=>{
-    el.addEventListener("blur",()=>{el.value=normalizeDotDecimal(el.value);saveDraft()});
+    el.addEventListener("change",()=>{el.value=normalizeDotDecimal(el.value);saveDraft()});
   });
 });
 
@@ -361,7 +360,6 @@ function clonePhase(){
     if(s.type==="checkbox") d.checked=s.checked; else d.value=s.value;
     d.dispatchEvent(new Event("change",{bubbles:true}));
   });
-  // Tự động sao chép 4. Tồn tại sang IV. Bất thường, khiếm khuyết, lưu ý
   $("#finalIssues").value = $("#issues").value;
   saveDraft();
 }
@@ -451,9 +449,9 @@ function buildMailReport(){
   const [shiftName]= $("#shift").value.split("|");
   const prev=bullets($("#previousAbnormal").value, false);
   const issues=bullets($("#issues").value, false);
+  const during=bullets($("#duringText").value, false);
   const final=bullets($("#finalIssues").value, false);
   const staff=$("#staff").value.trim();
-  const during=$("#duringText").value.trim();
 
   return `Kính gửi: Lãnh đạo PXVH – NMNĐ Quảng Trạch.
 
@@ -477,7 +475,9 @@ ${prev}
 
 ${issues}
 
-II. Trong ca: ${during}
+II. Trong ca:
+
+${during}
 
 III. Giao ca:
 
@@ -591,8 +591,6 @@ function restorePhase(p,obj={}){
       else if(els[0]) els[0].value=v;
     }
   });
-  $('[data-f="screen"]',p)?.dispatchEvent(new Event("change"));
-  $('[data-f="washState"]',p)?.dispatchEvent(new Event("change"));
 }
 function saveDraft(){
   try{
@@ -630,8 +628,14 @@ function loadDraft(){
 }
 
 let saveTimer;
-app.addEventListener("input",()=>{clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,250)});
-app.addEventListener("change",()=>{clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,100)});
+app.addEventListener("input",()=>{
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(saveDraft, 800);
+});
+app.addEventListener("change",()=>{
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(saveDraft, 300);
+});
 
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Bắt đầu ca mới: Giữ nguyên mục 3, 4, II, IV và chỉ làm mới số liệu đo kiểm của ca?")) return;
@@ -651,10 +655,10 @@ $("#newShift").addEventListener("click",()=>{
   location.reload();
 });
 
-const hadDraft=loadDraft();
+loadDraft();
 setCurrentDateIfEmpty();
 syncShift();
-if(!hadDraft) syncRoster(true);
+syncRoster(false);
 })();
 </script>
 </body>
