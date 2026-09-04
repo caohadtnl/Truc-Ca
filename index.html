@@ -349,7 +349,7 @@ $("#receiveKip").addEventListener("change",()=>{syncReceiveRoster();saveDraft()}
 
 $$(".phase").forEach(box=>{
   $$('[data-decimal]',box).forEach(el=>{
-    el.addEventListener("change",()=>{el.value=normalizeDotDecimal(el.value);saveDraft()});
+    el.addEventListener("blur",()=>{el.value=normalizeDotDecimal(el.value);saveDraft()});
   });
 });
 
@@ -514,6 +514,7 @@ ${issues}`;
 }
 
 async function copyText(text, msg){
+  saveDraft();
   let ok=false;
   try{
     if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); ok=true; }
@@ -627,15 +628,11 @@ function loadDraft(){
   }catch(e){return false}
 }
 
-let saveTimer;
-app.addEventListener("input",()=>{
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(saveDraft, 800);
+// Lưu dữ liệu an toàn khi gạt app xuống hoặc đóng app
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") saveDraft();
 });
-app.addEventListener("change",()=>{
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(saveDraft, 300);
-});
+window.addEventListener("pagehide", saveDraft);
 
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Bắt đầu ca mới: Giữ nguyên mục 3, 4, II, IV và chỉ làm mới số liệu đo kiểm của ca?")) return;
@@ -655,7 +652,7 @@ $("#newShift").addEventListener("click",()=>{
   location.reload();
 });
 
-loadDraft();
+const hadDraft=loadDraft();
 setCurrentDateIfEmpty();
 syncShift();
 syncRoster(false);
