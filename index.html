@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<title>Báo cáo trực ca Tuần hoàn - Clo - NLNH</title>
+<title>Báo cáo trực ca Tuần hoàn - Clo</title>
 <style>
 :root{
   --blue:#d97706; --blue2:#f59e0b; --bg:#fff9f1; --card:#fff;
@@ -65,7 +65,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </style>
 </head>
 <body>
-<header class="topbar">Báo cáo trực ca Tuần Hoàn – Clo - NLNH</header>
+<header class="topbar">Báo cáo trực ca Tuần hoàn – Clo</header>
 
 <main class="app" id="app">
   <div class="tabs">
@@ -361,6 +361,8 @@ function clonePhase(){
     if(s.type==="checkbox") d.checked=s.checked; else d.value=s.value;
     d.dispatchEvent(new Event("change",{bubbles:true}));
   });
+  // Tự động sao chép 4. Tồn tại sang IV. Bất thường, khiếm khuyết, lưu ý
+  $("#finalIssues").value = $("#issues").value;
   saveDraft();
 }
 $("#cloneReceive").addEventListener("click",clonePhase);
@@ -632,16 +634,18 @@ app.addEventListener("input",()=>{clearTimeout(saveTimer);saveTimer=setTimeout(s
 app.addEventListener("change",()=>{clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,100)});
 
 $("#newShift").addEventListener("click",()=>{
-  if(!confirm("Bắt đầu ca mới: Giữ nguyên mục 3, 4, II và chỉ làm mới số liệu đo kiểm của ca?")) return;
+  if(!confirm("Bắt đầu ca mới: Giữ nguyên mục 3, 4, II, IV và chỉ làm mới số liệu đo kiểm của ca?")) return;
   const keepPrev = $("#previousAbnormal").value;
   const keepIssues = $("#issues").value;
   const keepDuring = $("#duringText").value;
+  const keepFinal = $("#finalIssues").value;
   localStorage.removeItem(STORE_KEY);
   
   const tempSave = {
     previousAbnormal: keepPrev,
     issues: keepIssues,
-    duringText: keepDuring
+    duringText: keepDuring,
+    finalIssues: keepFinal
   };
   localStorage.setItem(STORE_KEY, JSON.stringify(tempSave));
   location.reload();
