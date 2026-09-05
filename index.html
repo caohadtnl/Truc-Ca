@@ -186,6 +186,8 @@ const roster = {
 const U = ["1A","1B","2A","2B"];
 const STORE_KEY = "qt_shift_report_v1";
 
+let isResetting = false;
+
 const $ = (s, el=app) => el.querySelector(s);
 const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
@@ -276,10 +278,9 @@ return `
   </div>
 
   <div class="metric">
-    <label class="field">Số lượng bình clo trong nhà clo</label>
     <div class="grid2">
-      <div><input inputmode="numeric" data-f="totalCylinder" placeholder="Tổng số bình"></div>
-      <div><input inputmode="numeric" data-f="remainingCylinder" placeholder="Số bình còn clo"></div>
+      <div><label class="field">Tổng số bình Clo</label><input inputmode="numeric" data-f="totalCylinder" placeholder="Tổng số bình"></div>
+      <div><label class="field">Tổng số bình Clo khả dụng</label><input inputmode="numeric" data-f="remainingCylinder" placeholder="Số bình khả dụng"></div>
     </div>
   </div>
 
@@ -349,7 +350,7 @@ $("#receiveKip").addEventListener("change",()=>{syncReceiveRoster();saveDraft()}
 
 $$(".phase").forEach(box=>{
   $$('[data-decimal]',box).forEach(el=>{
-    el.addEventListener("blur",()=>{el.value=normalizeDotDecimal(el.value);saveDraft()});
+    el.addEventListener("change",()=>{el.value=normalizeDotDecimal(el.value);saveDraft()});
   });
 });
 
@@ -384,13 +385,6 @@ function chlorineDetail(p){
   if(channel.length) parts.push(`xả châm liên tục xuống kênh ${channel.join(", ")}`);
   return parts.join(" ");
 }
-function cylinders(p){
-  const total=val(p,"totalCylinder"), remain=val(p,"remainingCylinder");
-  if(total && remain) return `${remain}/${total}`;
-  if(remain) return remain;
-  if(total) return total;
-  return "";
-}
 function boosterText(p){
   const a=checked(p,"booster");
   if(!a.length) return "";
@@ -418,6 +412,8 @@ function phaseText(p, isGroup=false){
   const chlorine=chlorineDetail(p);
   const tankA=val(p,"tankA")||"0";
   const tankB=val(p,"tankB")||"0";
+  const totalCyl = val(p,"totalCylinder");
+  const remainCyl = val(p,"remainingCylinder");
 
   let cwpStr = cwp.length ? `chạy bơm tuần hoàn ${cwp.map(x=>"CWP "+x).join(", ")}` : "Đang dừng";
   let cwpDis = vals(p,"dis").filter(Boolean).join("/") || "";
@@ -440,7 +436,8 @@ function phaseText(p, isGroup=false){
 `- Khối lượng NaOH trong bể chứa: ${val(p,"naoh") ? val(p,"naoh") : ""}`,
 `- Hệ thống bơm nước hồi: ${val(p,"returnPump")}`,
 `- Mức bể nước thu hồi A/B: ${tankA}/${tankB}`,
-`- Số bình clo còn: ${cylinders(p)}`
+`- Tổng số bình Clo: ${totalCyl}`,
+`- Tổng số bình Clo khả dụng: ${remainCyl}`
   ];
   return lines.join(isGroup ? "\n" : "\n\n");
 }
@@ -594,6 +591,7 @@ function restorePhase(p,obj={}){
   });
 }
 function saveDraft(){
+  if(isResetting) return;
   try{
     const data={
       workDate:$("#workDate").value, kip:$("#kip").value, shift:$("#shift").value,
@@ -628,14 +626,16 @@ function loadDraft(){
   }catch(e){return false}
 }
 
-// Lưu dữ liệu an toàn khi gạt app xuống hoặc đóng app
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") saveDraft();
+  if (!isResetting && document.visibilityState === "hidden") saveDraft();
 });
-window.addEventListener("pagehide", saveDraft);
+window.addEventListener("pagehide", () => {
+  if (!isResetting) saveDraft();
+});
 
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Bắt đầu ca mới: Giữ nguyên mục 3, 4, II, IV và chỉ làm mới số liệu đo kiểm của ca?")) return;
+  isResetting = true;
   const keepPrev = $("#previousAbnormal").value;
   const keepIssues = $("#issues").value;
   const keepDuring = $("#duringText").value;
@@ -652,7 +652,7 @@ $("#newShift").addEventListener("click",()=>{
   location.reload();
 });
 
-const hadDraft=loadDraft();
+loadDraft();
 setCurrentDateIfEmpty();
 syncShift();
 syncRoster(false);
