@@ -255,7 +255,7 @@ const roster = {
   E:["Phạm Tiến Sỹ","Trịnh Dương Thọ"]
 };
 const U = ["1A","1B","2A","2B"];
-const STORE_KEY = "qt_shift_report_v8";
+const STORE_KEY = "qt_shift_report_v9";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
 
@@ -808,7 +808,7 @@ function switchTab(targetTab){
   $$("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
   if(targetTab === "report") $("#reportText").value = buildMailReport();
   
-  // Tự động cuộn lên đầu tức thì khi chuyển tab
+  // Cuộn lên đầu tức thì khi chuyển tab
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
@@ -890,10 +890,13 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", saveDraft);
 
-// Bắt đầu ca mới
+// Bắt đầu ca mới (Giữ lại Tồn tại thiết bị)
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
   
+  // Tồn tại của ca mới sẽ kế thừa từ Mục IV (Giao ca) hoặc giữ nguyên Mục 4 nếu Mục IV trống
+  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;
+
   $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
   $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");
   $$(".phase select").forEach(sel => sel.selectedIndex = 0);
@@ -901,11 +904,15 @@ $("#newShift").addEventListener("click",()=>{
   $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");
   $$('[data-f="oil"]', handoverPhase).forEach(el => el.value = "190");
 
+  // Xóa trắng Bất thường ca trước để ca mới tự ghi nhận
   $("#previousAbnormal").value = "";
-  $("#issues").value = "";
-  $("#duringText").value = DEFAULT_DURING_TEXT;
-  $("#finalIssues").value = "";
+  
+  // Giữ lại Tồn tại thiết bị cho ca mới và đồng bộ sang Mục IV
+  $("#issues").value = inheritedIssues;
+  $("#finalIssues").value = inheritedIssues;
   finalIssuesManualModified = false;
+
+  $("#duringText").value = DEFAULT_DURING_TEXT;
 
   $("#receiveKip").value = "";
   $("#receivePeople").value = "";
