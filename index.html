@@ -31,7 +31,7 @@ body{margin:0}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 
-/* 1. THANH TIÊU ĐỀ TOPBAR - CHUẨN TÔNG CAM THEO LOGO */
+/* 1. THANH TIÊU ĐỀ TOPBAR */
 .topbar{
   height:44px;
   background:var(--orange-header);
@@ -50,7 +50,7 @@ button{cursor:pointer}
 
 .app{max-width:980px;margin:0 auto;padding:6px 10px 80px}
 
-/* 2. THANH TAB ĐÓNG BĂNG - NỀN TRẮNG GƯƠNG MỜ, NÚT ACTIVE MÀU CAM THƯƠNG HIỆU */
+/* 2. THANH TAB ĐÓNG BĂNG */
 .tabs{
   display:flex;
   gap:6px;
@@ -98,13 +98,13 @@ button{cursor:pointer}
 .card-title{font-size:16px;font-weight:800;margin:0 0 12px;color:#1e293b}
 .section-label{font-size:12.5px;color:var(--muted);font-weight:700;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.03em}
 
-/* Lưới chống xô lệch */
+/* Lưới hiển thị */
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .cwp-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 
-/* Ô TICK VÀ CHECKBOX - BẢO TOÀN HOẠT ĐỘNG SAFARI */
+/* Nút tick CWP & Thiết bị */
 .choice-cwp{
   display:flex;align-items:center;justify-content:center;gap:5px;
   border:1.5px solid var(--line);background:white;border-radius:10px;
@@ -132,7 +132,7 @@ button{cursor:pointer}
 
 label.field{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;font-weight:600}
 
-/* KHÓA KÍCH THƯỚC INPUT, SELECT, TEXTAREA TRÊN IOS (TRỪ CHECKBOX) */
+/* Định dạng Input, Select, Textarea */
 input:not([type="checkbox"]), select, textarea{
   width:100%;
   max-width:100%;
@@ -173,7 +173,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .btn-reset-span{grid-column:1/-1}
 
-/* MÀN HÌNH KHÓA XÁC THỰC MẬT KHẨU */
+/* Màn hình khóa xác thực mật khẩu */
 #loginOverlay{
   position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:9999;
   display:flex;align-items:center;justify-content:center;padding:16px;
@@ -490,7 +490,7 @@ return `
         </div>
       </div>
     </div>
-    <div><label class="field">Khối lượng NaOH trong bể chứa</label><input inputmode="text" data-f="naoh"></div>
+    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"></div>
     <div>
       <label class="field">Hệ thống bơm nước hồi</label>
       <select data-f="returnPump"><option value="stop">Ngừng</option><option value="run">Đang chạy</option></select>
@@ -502,7 +502,7 @@ return `
         </div>
       </div>
     </div>
-    <div style="grid-column:1/-1"><div class="grid2"><input inputmode="text" data-f="tankA" placeholder="Mức nước bể A"><input inputmode="text" data-f="tankB" placeholder="Mức nước bể B"></div></div>
+    <div style="grid-column:1/-1"><div class="grid2"><input inputmode="text" data-f="tankA" placeholder="Mức nước bể A (mm)"><input inputmode="text" data-f="tankB" placeholder="Mức nước bể B (mm)"></div></div>
   </div>
 </div>`;
 }
@@ -777,8 +777,8 @@ function phaseText(p, isGroup=false){
     : "đang dừng";
   
   const isChlorineRun = val(p,"chlorineState") === "run";
-  const tankA=val(p,"tankA")||"0";
-  const tankB=val(p,"tankB")||"0";
+  const tankA=val(p,"tankA");
+  const tankB=val(p,"tankB");
   const totalCyl = val(p,"totalCylinder");
   const remainCyl = val(p,"remainingCylinder");
 
@@ -788,6 +788,11 @@ function phaseText(p, isGroup=false){
 
   let tempVals = vals(p,"temp").filter(Boolean).join("/") || "";
   if(tempVals && !tempVals.includes("°C")) tempVals += " °C";
+
+  let naohStr = val(p,"naoh");
+  if(naohStr && !naohStr.toLowerCase().includes("mm")) naohStr += " mm";
+
+  let tankStr = (tankA || tankB) ? `${tankA || "0"}/${tankB || "0"} mm` : "0/0 mm";
 
   const lines = [
 `- Hệ thống bơm tuần hoàn: ${cwpStr}`,
@@ -812,9 +817,9 @@ function phaseText(p, isGroup=false){
 
   lines.push(
 `- Hệ thống trung hòa clo: ${neutralText(p)}`,
-`- Khối lượng NaOH trong bể chứa: ${val(p,"naoh") ? val(p,"naoh") : ""}`,
+`- Khối lượng NaOH trong bể chứa: ${naohStr}`,
 `- Hệ thống bơm nước hồi: ${returnPumpText(p)}`,
-`- Mức bể nước thu hồi A/B: ${tankA}/${tankB}`,
+`- Mức bể nước thu hồi A/B: ${tankStr}`,
 `- Tổng số bình Clo: ${totalCyl}`,
 `- Tổng số bình Clo khả dụng: ${remainCyl}`
   );
@@ -924,7 +929,7 @@ function switchTab(targetTab){
   $$("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
   if(targetTab === "report") $("#reportText").value = buildMailReport();
   
-  // Tự động cuộn lên đỉnh tức thì khi chuyển tab
+  // Tự động cuộn lên đầu tức thì khi chuyển tab
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
