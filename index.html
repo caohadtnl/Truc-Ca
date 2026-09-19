@@ -5,71 +5,198 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Báo cáo trực ca">
-<meta name="theme-color" content="#d97706">
+<meta name="apple-mobile-web-app-title" content="Báo cáo ca">
+<meta name="theme-color" content="#ea580c">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <title>Báo cáo trực ca Tuần hoàn - Clo</title>
-
 <style>
 :root{
-  --blue:#d97706;--blue2:#f59e0b;--bg:#fff9f1;--card:#fff;
-  --text:#152033;--muted:#65758b;--line:#cbd5e1;--ok:#16794c;
-  --warn:#9a5b00;--danger:#a51d2d;--soft:#fff3e0;
+  --orange-header: linear-gradient(135deg, #ea580c, #f59e0b);
+  --orange-brand: #ea580c;
+  --orange-active: #d97706;
+  --bg: #fffbf5;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --line: #cbd5e1;
+  --ok: #15803d;
+  --danger: #b91c1c;
+  --soft: #fff7ed;
 }
 *{box-sizing:border-box}
 html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
 body{margin:0}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-.topbar{height:42px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;letter-spacing:.02em;position:sticky;top:0;z-index:30;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.app{max-width:980px;margin:0 auto;padding:8px 10px 80px}
-.tabs{display:flex;gap:6px;overflow:auto;padding:6px 0 8px;position:sticky;top:42px;background:var(--bg);z-index:20}
-.tab{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font-weight:700;color:#334155;min-height:40px;font-size:14px}
-.tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px;box-shadow:0 2px 6px rgba(15,23,42,.03)}
-.card-title{font-size:16px;font-weight:800;margin:0 0 11px}
-.section-label{font-size:13px;color:var(--muted);font-weight:700;margin:14px 0 7px;text-transform:uppercase;letter-spacing:.02em}
+
+/* 1. THANH TIÊU ĐỀ TOPBAR */
+.topbar{
+  height:44px;
+  background:var(--orange-header);
+  color:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:0.02em;
+  position:sticky;
+  top:0;
+  z-index:50;
+  box-shadow:0 2px 5px rgba(234,88,12,0.25);
+}
+
+.app{max-width:980px;margin:0 auto;padding:6px 10px 80px}
+
+/* 2. THANH TAB ĐÓNG BĂNG */
+.tabs{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:8px 0;
+  position:sticky;
+  top:44px;
+  background:rgba(255,251,245,0.92);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:40;
+  border-bottom:1px solid #fed7aa;
+  margin-bottom:12px;
+  -webkit-overflow-scrolling:touch;
+}
+.tab{
+  white-space:nowrap;
+  border:1.5px solid var(--line);
+  background:white;
+  border-radius:10px;
+  padding:8px 14px;
+  font-weight:700;
+  color:#475569;
+  min-height:40px;
+  font-size:14px;
+  flex-shrink:0;
+  transition:all .15s ease;
+}
+.tab.active{
+  background:var(--orange-brand);
+  border-color:var(--orange-brand);
+  color:#ffffff;
+  box-shadow:0 2px 6px rgba(234,88,12,0.3);
+}
+
+/* Thẻ chứa nội dung */
+.card{
+  background:var(--card);
+  border:1px solid #fed7aa;
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:14px;
+  box-shadow:0 2px 6px rgba(234,88,12,0.05);
+}
+.card-title{font-size:16px;font-weight:800;margin:0 0 12px;color:#1e293b}
+.section-label{font-size:12.5px;color:var(--muted);font-weight:700;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.03em}
+
+/* Lưới hiển thị */
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.grid2>div,.grid3>div,.grid4>div{min-width:0}
-.cwp-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.choice-cwp,.choice{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;min-height:42px;font-weight:700;color:#334155;transition:all .15s ease}
-.choice-cwp{justify-content:center;gap:4px;padding:7px 2px;font-size:13px}
-.choice-cwp input{width:16px;height:16px;min-height:16px;margin:0}
-.choice input{width:18px;height:18px;min-height:18px;margin:0}
-.choice.is-checked,.choice-cwp.is-checked{background:#e0f2fe!important;border-color:#0284c7!important;color:#0369a1!important}
+.cwp-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+
+/* Nút tick CWP & Thiết bị */
+.choice-cwp{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  border:1.5px solid var(--line);background:white;border-radius:10px;
+  padding:7px 2px;min-height:42px;font-weight:700;font-size:13px;
+  color:#334155;transition:all .15s ease;min-width:0;cursor:pointer;
+}
+.choice-cwp input[type="checkbox"]{
+  width:16px;height:16px;margin:0;flex-shrink:0;
+  -webkit-appearance:checkbox!important;appearance:checkbox!important;cursor:pointer;
+}
+.choice-cwp.is-checked{background:#e0f2fe!important;border-color:#0284c7!important;color:#0369a1!important}
+
 .checks{display:flex;flex-wrap:wrap;gap:6px}
+.choice{
+  display:flex;align-items:center;gap:7px;
+  border:1.5px solid var(--line);background:white;border-radius:10px;
+  padding:7px 11px;min-height:42px;font-weight:700;color:#334155;
+  transition:all .15s ease;cursor:pointer;
+}
+.choice input[type="checkbox"]{
+  width:18px;height:18px;margin:0;flex-shrink:0;
+  -webkit-appearance:checkbox!important;appearance:checkbox!important;cursor:pointer;
+}
+.choice.is-checked{background:#e0f2fe!important;border-color:#0284c7!important;color:#0369a1!important}
+
 label.field{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;font-weight:600}
-input,select,textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;border:1.5px solid var(--line);background:#fff;border-radius:10px;color:var(--text);min-height:44px;padding:9px 10px;font-size:16px;outline:none}
-input[type="date"]{width:100%;min-width:0;max-width:100%;display:block;box-sizing:border-box}
-input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(217,119,6,.15)}
+
+/* Định dạng Input, Select, Textarea */
+input:not([type="checkbox"]), select, textarea{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  -webkit-appearance:none;
+  appearance:none;
+  border:1.5px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  color:var(--text);
+  min-height:44px;
+  padding:9px 10px;
+  font-size:16px;
+  outline:none;
+}
+input[type="date"]{
+  display:block;
+  -webkit-min-logical-width:calc(100% - 20px);
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--orange-brand);
+  box-shadow:0 0 0 3px rgba(234,88,12,0.15);
+}
 textarea{min-height:105px;resize:vertical;line-height:1.45}
 .metric{margin-top:10px}
-.sub-panel{background:var(--soft);padding:10px;border-radius:10px;border:1px dashed var(--line);margin-top:8px}
-.head4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
+.sub-panel{background:var(--soft);padding:11px;border-radius:10px;border:1px dashed #fdba74;margin-top:8px}
+.head4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
 .num4 input{text-align:center;padding-left:1px;padding-right:1px;font-size:16px}
-.btn{border:1px solid var(--line);background:#fff;border-radius:10px;min-height:42px;padding:8px 10px;font-weight:800;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
-.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
-.btn.success{background:#16794c;border-color:#16794c;color:#fff}
-.btn.danger{color:var(--danger)}
+
+.btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:8px 12px;font-weight:700;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.btn.primary{background:var(--orange-brand);border-color:var(--orange-brand);color:white}
+.btn.success{background:var(--ok);border-color:var(--ok);color:white}
+.btn.danger{color:var(--danger);border-color:#fecaca;background:#fef2f2}
 .status{font-size:13px;margin-top:8px;color:var(--ok);font-weight:700}
 .hidden{display:none!important}
 .report{min-height:500px;font-family:inherit;line-height:1.5}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .btn-reset-span{grid-column:1/-1}
-#loginOverlay{position:fixed;inset:0;background:rgba(15,23,42,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
-.login-box{background:#fff;width:100%;max-width:360px;border-radius:16px;padding:24px 20px;box-shadow:0 20px 25px -5px rgba(0,0,0,.3);text-align:center}
+
+/* Màn hình khóa xác thực mật khẩu */
+#loginOverlay{
+  position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:9999;
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  backdrop-filter:blur(8px);
+}
+.login-box{
+  background:white;width:100%;max-width:360px;border-radius:16px;padding:26px 20px;
+  box-shadow:0 20px 25px -5px rgba(0,0,0,0.4);text-align:center;
+}
 .login-box h2{font-size:18px;margin:0 0 8px;font-weight:800;color:var(--text)}
 .login-box p{font-size:13.5px;color:var(--muted);margin:0 0 18px;line-height:1.4}
-.login-box input{margin-bottom:14px;text-align:center;font-size:17px;letter-spacing:.08em}
+.login-box input{margin-bottom:14px;text-align:center;font-size:17px;letter-spacing:0.08em}
 .login-error{color:var(--danger);font-size:13px;font-weight:700;margin-top:10px;min-height:18px}
+
 @media(max-width:640px){
- .app{padding:6px 8px 70px}.grid2,.grid3{grid-template-columns:1fr}.grid4{gap:4px}
- .cwp-row{gap:4px}.choice-cwp{font-size:12px;padding:7px 1px}.num4 input{font-size:16px!important;padding:8px 0}
- .card{padding:12px}.btn{font-size:13.5px}
+ .app{padding:6px 8px 70px}
+ .grid2,.grid3{grid-template-columns:1fr}
+ .grid4{gap:4px}
+ .cwp-row{gap:4px}
+ .choice-cwp{font-size:12px;padding:7px 1px}
+ .num4 input{font-size:16px!important;padding:8px 0}
+ .card{padding:12px}
+ .btn{font-size:14px}
 }
 </style>
 </head>
@@ -116,19 +243,26 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
         </div>
         <div><label class="field">Thời gian</label><input id="shiftTime" readonly></div>
       </div>
-      <div class="metric"><label class="field">1. Nhân sự</label><input id="staff"></div>
+      <div class="metric">
+        <label class="field">1. Nhân sự</label>
+        <input id="staff">
+      </div>
     </div>
+
     <div class="card">
       <h2 class="card-title">3. Bất thường ca trước / Thao tác ca trước</h2>
       <textarea id="previousAbnormal" data-bullet placeholder="Mỗi nội dung một dòng."></textarea>
     </div>
+
     <div class="card">
       <h2 class="card-title">4. Tồn tại / Bất thường tồn đọng</h2>
       <textarea id="issues" data-bullet placeholder="Mỗi tồn tại một dòng."></textarea>
     </div>
   </section>
 
-  <section data-page="receive" class="hidden"><div id="receiveMount"></div></section>
+  <section data-page="receive" class="hidden">
+    <div id="receiveMount"></div>
+  </section>
 
   <section data-page="during" class="hidden">
     <div class="card">
@@ -139,22 +273,31 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 
   <section data-page="handover" class="hidden">
     <div id="handoverMount"></div>
+
     <div class="card">
       <h2 class="card-title">IV. Bất thường, khiếm khuyết, lưu ý</h2>
       <textarea id="finalIssues" data-bullet placeholder="Mỗi nội dung một dòng."></textarea>
     </div>
+
     <div class="card">
       <h2 class="card-title">Người giao / nhận ca</h2>
       <div class="grid2">
-        <div><label class="field">Giao ca</label><input id="handoverPeople"></div>
-        <div><label class="field">Kíp nhận ca</label>
+        <div>
+          <label class="field">Giao ca</label>
+          <input id="handoverPeople">
+        </div>
+        <div>
+          <label class="field">Kíp nhận ca</label>
           <select id="receiveKip">
             <option value="">-- Chọn kíp --</option>
             <option value="A">Kíp A</option><option value="B">Kíp B</option>
             <option value="C">Kíp C</option><option value="D">Kíp D</option><option value="E">Kíp E</option>
           </select>
         </div>
-        <div style="grid-column:1/-1"><label class="field">Nhận ca</label><input id="receivePeople" placeholder="Chọn Kíp nhận ca để tự điền"></div>
+        <div style="grid-column:1/-1">
+          <label class="field">Nhận ca</label>
+          <input id="receivePeople" placeholder="Chọn Kíp nhận ca để tự điền">
+        </div>
       </div>
     </div>
   </section>
@@ -163,6 +306,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
     <div class="card">
       <h2 class="card-title" style="margin:0 0 10px" id="reportTitle">Báo cáo hoàn chỉnh</h2>
       <textarea id="reportText" class="report" readonly></textarea>
+      
       <div class="report-actions">
         <button class="btn primary" type="button" id="copyMailReport">Chép gửi Mail</button>
         <button class="btn success" type="button" id="copyGroupReport">Chép gửi Group</button>
@@ -175,50 +319,57 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 
 <script>
 (() => {
-const app=document.getElementById('app');
-const APP_PASS="Ndqt1@hacn";
-const AUTH_KEY="qt_shift_auth_state_v2";
+const app = document.getElementById('app');
+const APP_PASS = "Tthndqt1";
+const AUTH_KEY = "qt_shift_auth_state";
 
-const loginOverlay=document.getElementById('loginOverlay');
-const appPass=document.getElementById('appPass');
-const btnLogin=document.getElementById('btnLogin');
-const loginMsg=document.getElementById('loginMsg');
+// Xác thực mật khẩu
+const loginOverlay = document.getElementById('loginOverlay');
+const appPass = document.getElementById('appPass');
+const btnLogin = document.getElementById('btnLogin');
+const loginMsg = document.getElementById('loginMsg');
 
 function checkAuth(){
-  if(localStorage.getItem(AUTH_KEY)==="true") loginOverlay.classList.add("hidden");
-  else{
+  if(localStorage.getItem(AUTH_KEY) === "true"){
+    loginOverlay.classList.add("hidden");
+  } else {
     loginOverlay.classList.remove("hidden");
-    setTimeout(()=>appPass.focus(),200);
+    setTimeout(() => appPass.focus(), 200);
   }
 }
+
 function doLogin(){
-  if(appPass.value===APP_PASS){
-    localStorage.setItem(AUTH_KEY,"true");
+  if(appPass.value === APP_PASS){
+    localStorage.setItem(AUTH_KEY, "true");
     loginOverlay.classList.add("hidden");
-  }else{
-    loginMsg.textContent="Mật khẩu không đúng, vui lòng nhập lại.";
-    appPass.value="";
+  } else {
+    loginMsg.textContent = "Mật khẩu không đúng, vui lòng nhập lại.";
+    appPass.value = "";
     appPass.focus();
   }
 }
-btnLogin.addEventListener("click",doLogin);
-appPass.addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()});
+
+btnLogin.addEventListener("click", doLogin);
+appPass.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") doLogin();
+});
+
 checkAuth();
 
-const roster={
+const roster = {
   A:["Nguyễn Thành Trung","Đào Ngọc Văn"],
   B:["Nguyễn Văn Tuấn","Cao Niên Hà"],
   C:["Lê Hải Phong","Đinh Hoàng Giang"],
   D:["Nguyễn Hữu Sỹ","Nguyễn Duy Cường"],
   E:["Phạm Tiến Sỹ","Trịnh Dương Thọ"]
 };
-const U=["1A","1B","2A","2B"];
-const STORE_KEY="qt_shift_report_v8";
-const DEFAULT_DURING_TEXT="- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
-let finalIssuesManualModified=false;
+const U = ["1A","1B","2A","2B"];
+const STORE_KEY = "qt_shift_report_v15";
+const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
+let finalIssuesManualModified = false;
 
-const $=(s,el=app)=>el.querySelector(s);
-const $$=(s,el=app)=>[...el.querySelectorAll(s)];
+const $ = (s, el=app) => el.querySelector(s);
+const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
 function phaseHTML(title){
 return `
@@ -237,7 +388,7 @@ return `
   </div>
 
   <div class="section-label">Lưới chắn rác</div>
-
+  
   <div class="metric">
     <label class="field">Lưới quay</label>
     <select data-f="screen"><option value="stop">Đang dừng</option><option value="run">Đang chạy</option></select>
@@ -259,7 +410,10 @@ return `
             <label class="choice"><input type="checkbox" data-f="washPump" value="B">Bơm B</label>
           </div>
         </div>
-        <div><label class="field">Áp suất bơm rửa lưới (MPa)</label><input inputmode="decimal" data-decimal data-f="washPressure"></div>
+        <div>
+          <label class="field">Áp suất bơm rửa lưới (MPa)</label>
+          <input inputmode="decimal" data-decimal data-f="washPressure">
+        </div>
       </div>
     </div>
   </div>
@@ -270,31 +424,26 @@ return `
   </div>
 
   <div class="section-label">Bơm tuần hoàn & CNRV</div>
-
   <div class="metric">
     <label class="field">Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
     <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="dis">`).join("")}</div>
   </div>
-
   <div class="metric">
     <label class="field">Áp suất dầu thủy lực van CNRV 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
     <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="hp">`).join("")}</div>
   </div>
-
   <div class="metric">
     <label class="field">Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B (°C)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
     <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="temp">`).join("")}</div>
   </div>
-
   <div class="metric">
     <label class="field">Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B (Lít)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
     <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="oil" value="190">`).join("")}</div>
   </div>
-
   <div class="metric">
     <label class="field">Bơm dầu thủy lực van CNRV 1A/1B/2A/2B</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
@@ -302,7 +451,6 @@ return `
   </div>
 
   <div class="section-label">Hệ thống nhà clo</div>
-
   <div class="metric">
     <label class="field">Hệ thống nhà clo</label>
     <select data-f="chlorineState"><option value="run">Đang chạy</option><option value="stop" selected>Dừng</option></select>
@@ -311,25 +459,10 @@ return `
   <div class="sub-panel hidden" data-chlorine-active>
     <div class="grid2">
       <div><label class="field">Clo cấp nhánh</label><select data-f="chlorineSupply"><option value="">-- Chọn --</option><option>A</option><option>B</option></select></div>
-
       <div><label class="field">Bộ định lượng</label><div class="checks">${["A","B","C","D"].map(x=>`<label class="choice"><input type="checkbox" data-f="meter" value="${x}">${x}</label>`).join("")}</div></div>
-
       <div><label class="field">Xả xuống kênh</label><div class="checks">${U.map(x=>`<label class="choice"><input type="checkbox" data-f="channel" value="${x}">${x}</label>`).join("")}</div></div>
-
-      <div style="grid-column:1/-1">
-        <label class="field">Bơm tăng áp nước biển</label>
-        <div class="checks">${["A","B","C","D","Không hoạt động"].map(x=>`<label class="choice"><input type="checkbox" data-f="booster" value="${x}">${x}</label>`).join("")}</div>
-      </div>
-
-      <div style="grid-column:1/-1">
-        <label class="field">Bộ học</label>
-        <div class="checks">
-          <label class="choice"><input type="checkbox" data-f="boosterStudy" value="A">A</label>
-          <label class="choice"><input type="checkbox" data-f="boosterStudy" value="B">B</label>
-        </div>
-      </div>
+      <div style="grid-column:1/-1"><label class="field">Bơm tăng áp nước biển</label><div class="checks">${["A","B","C","D","Không hoạt động"].map(x=>`<label class="choice"><input type="checkbox" data-f="booster" value="${x}">${x}</label>`).join("")}</div></div>
     </div>
-
     <div class="metric">
       <label class="field">Nồng độ châm clo 1A/1B/2A/2B (ppm)</label>
       <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
@@ -345,7 +478,6 @@ return `
   </div>
 
   <div class="section-label">Hệ thống xử lý & Nước hồi</div>
-
   <div class="grid2 metric">
     <div>
       <label class="field">Hệ thống trung hòa clo</label>
@@ -358,9 +490,7 @@ return `
         </div>
       </div>
     </div>
-
-    <div><label class="field">Khối lượng NaOH trong bể chứa</label><input inputmode="text" data-f="naoh"></div>
-
+    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"></div>
     <div>
       <label class="field">Hệ thống bơm nước hồi</label>
       <select data-f="returnPump"><option value="stop">Ngừng</option><option value="run">Đang chạy</option></select>
@@ -372,290 +502,339 @@ return `
         </div>
       </div>
     </div>
-
-    <div style="grid-column:1/-1">
-      <div class="grid2">
-        <input inputmode="text" data-f="tankA" placeholder="Mức nước bể A">
-        <input inputmode="text" data-f="tankB" placeholder="Mức nước bể B">
-      </div>
-    </div>
+    <div style="grid-column:1/-1"><div class="grid2"><input inputmode="text" data-f="tankA" placeholder="Mức nước bể A (mm)"><input inputmode="text" data-f="tankB" placeholder="Mức nước bể B (mm)"></div></div>
   </div>
 </div>`;
 }
 
-$("#receiveMount").innerHTML=phaseHTML("2. Tình trạng thiết bị đầu ca");
-$("#handoverMount").innerHTML=phaseHTML("III. Giao ca");
+$("#receiveMount").innerHTML = phaseHTML("2. Tình trạng thiết bị đầu ca");
+$("#handoverMount").innerHTML = phaseHTML("III. Giao ca");
 
-const receivePhase=$("#receiveMount .phase");
-const handoverPhase=$("#handoverMount .phase");
+const receivePhase = $("#receiveMount .phase");
+const handoverPhase = $("#handoverMount .phase");
 
 function normalizeDotDecimal(v){
-  let s=String(v??"").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");
-  const first=s.indexOf(".");
-  if(first!==-1)s=s.slice(0,first+1)+s.slice(first+1).replace(/\./g,"");
+  let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");
+  const first = s.indexOf(".");
+  if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");
   return s;
 }
 function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value))}
-function val(box,f){const e=$(`[data-f="${f}"]`,box);return e?e.value.trim().replace(/,/g,"."):""}
+function val(box,f){const e=$(`[data-f="${f}"]`,box);return e ? e.value.trim().replace(/,/g,".") : ""}
 function checked(box,f){return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.value)}
 
 function updateCheckboxVisuals(box){
-  $$('input[type="checkbox"]',box).forEach(cb=>{
-    const parent=cb.closest('.choice,.choice-cwp');
-    if(parent)parent.classList.toggle('is-checked',cb.checked);
+  $$('input[type="checkbox"]', box).forEach(cb => {
+    const parent = cb.closest('.choice, .choice-cwp');
+    if(parent) parent.classList.toggle('is-checked', cb.checked);
   });
 }
 
 function syncReceiveToHandover(){
-  const srcEls=$$("input,select",receivePhase);
-  const dstEls=$$("input,select",handoverPhase);
-
-  srcEls.forEach((s,i)=>{
-    const d=dstEls[i];
-    if(!d)return;
-    const f=d.dataset.f;
-
-    if(["level","dis","hp","temp"].includes(f))d.value="";
-    else if(f==="oil")d.value="190";
-    else if(s.type==="checkbox")d.checked=s.checked;
-    else d.value=s.value;
-
-    d.dispatchEvent(new Event("input",{bubbles:true}));
+  const srcEls = $$("input, select", receivePhase);
+  const dstEls = $$("input, select", handoverPhase);
+  
+  srcEls.forEach((s, i) => {
+    const d = dstEls[i];
+    if(!d) return;
+    const f = d.dataset.f;
+    if(["level", "dis", "hp", "temp"].includes(f)){
+      d.value = "";
+    } else if(f === "oil") {
+      d.value = "190";
+    } else {
+      if(s.type === "checkbox") d.checked = s.checked;
+      else d.value = s.value;
+    }
+    d.dispatchEvent(new Event("input", {bubbles:true}));
   });
 
   updateCheckboxVisuals(handoverPhase);
 
   [
-    ['[data-f="screen"]','[data-screen-units]','run'],
-    ['[data-f="washState"]','[data-wash-details]','run'],
-    ['[data-f="chlorineState"]','[data-chlorine-active]','run'],
-    ['[data-f="neutral"]','[data-neutral-fan]','run'],
-    ['[data-f="returnPump"]','[data-return-pumps]','run']
-  ].forEach(([sel,target,activeVal])=>{
-    const s=$(sel,handoverPhase),t=$(target,handoverPhase);
-    if(s&&t)t.classList.toggle("hidden",s.value!==activeVal);
+    ['[data-f="screen"]', '[data-screen-units]', 'run'],
+    ['[data-f="washState"]', '[data-wash-details]', 'run'],
+    ['[data-f="chlorineState"]', '[data-chlorine-active]', 'run'],
+    ['[data-f="neutral"]', '[data-neutral-fan]', 'run'],
+    ['[data-f="returnPump"]', '[data-return-pumps]', 'run']
+  ].forEach(([sel, target, activeVal]) => {
+    const s = $(sel, handoverPhase);
+    const t = $(target, handoverPhase);
+    if(s && t) t.classList.toggle("hidden", s.value !== activeVal);
   });
 }
 
-function setupDynamicPhaseEvents(box,isReceive=false){
-  const screenState=$('[data-f="screen"]',box),screenUnits=$('[data-screen-units]',box);
+function setupDynamicPhaseEvents(box, isReceive=false){
+  const screenState=$('[data-f="screen"]',box), screenUnits=$('[data-screen-units]',box);
   screenState.addEventListener("change",()=>{
     screenUnits.classList.toggle("hidden",screenState.value!=="run");
-    if(isReceive)syncReceiveToHandover();
+    if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const washState=$('[data-f="washState"]',box),washDetails=$('[data-wash-details]',box);
+  const washState=$('[data-f="washState"]',box), washDetails=$('[data-wash-details]',box);
   washState.addEventListener("change",()=>{
     washDetails.classList.toggle("hidden",washState.value!=="run");
-    if(isReceive)syncReceiveToHandover();
+    if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const chlorineState=$('[data-f="chlorineState"]',box),chlorineActive=$('[data-chlorine-active]',box);
+  const chlorineState=$('[data-f="chlorineState"]',box), chlorineActive=$('[data-chlorine-active]',box);
   chlorineState.addEventListener("change",()=>{
     chlorineActive.classList.toggle("hidden",chlorineState.value!=="run");
-    if(isReceive)syncReceiveToHandover();
+    if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const neutralState=$('[data-f="neutral"]',box),neutralFan=$('[data-neutral-fan]',box);
+  const neutralState=$('[data-f="neutral"]',box), neutralFan=$('[data-neutral-fan]',box);
   neutralState.addEventListener("change",()=>{
     neutralFan.classList.toggle("hidden",neutralState.value!=="run");
-    if(isReceive)syncReceiveToHandover();
+    if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const returnState=$('[data-f="returnPump"]',box),returnPumps=$('[data-return-pumps]',box);
+  const returnState=$('[data-f="returnPump"]',box), returnPumps=$('[data-return-pumps]',box);
   returnState.addEventListener("change",()=>{
     returnPumps.classList.toggle("hidden",returnState.value!=="run");
-    if(isReceive)syncReceiveToHandover();
+    if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
   const boosterItems=$$('input[data-f="booster"]',box);
   boosterItems.forEach(el=>el.addEventListener("change",()=>{
-    if(el.value==="Không hoạt động"&&el.checked){
+    if(el.value==="Không hoạt động" && el.checked){
       boosterItems.forEach(x=>{if(x!==el)x.checked=false});
     }else if(el.checked){
       const none=boosterItems.find(x=>x.value==="Không hoạt động");
-      if(none)none.checked=false;
+      if(none) none.checked=false;
     }
-    updateCheckboxVisuals(box);
-    if(isReceive)syncReceiveToHandover();
-    saveDraft();
   }));
 
-  /* Bộ học A/B: hai ô độc lập, được tick cả hai */
-  $$('input[type="checkbox"]',box).forEach(cb=>{
-    if(cb.dataset.f==="booster")return; // đã xử lý ở trên
-    cb.addEventListener("change",()=>{
+  $$('input[type="checkbox"]', box).forEach(cb => {
+    cb.addEventListener("change", () => {
       updateCheckboxVisuals(box);
-      if(isReceive)syncReceiveToHandover();
+      if(isReceive) syncReceiveToHandover();
       saveDraft();
     });
   });
 
-  $$('select',box).forEach(sel=>sel.addEventListener("change",()=>{
-    if(isReceive)syncReceiveToHandover();
-    saveDraft();
-  }));
+  $$('select', box).forEach(sel => {
+    sel.addEventListener("change", () => {
+      if(isReceive) syncReceiveToHandover();
+      saveDraft();
+    });
+  });
 
-  $$('[data-decimal]',box).forEach(el=>el.addEventListener("change",()=>{
-    el.value=normalizeDotDecimal(el.value);
-    saveDraft();
-  }));
+  $$('[data-decimal]',box).forEach(el=>{
+    el.addEventListener("change",()=>{
+      el.value=normalizeDotDecimal(el.value);
+      saveDraft();
+    });
+  });
 }
 
-setupDynamicPhaseEvents(receivePhase,true);
-setupDynamicPhaseEvents(handoverPhase,false);
+setupDynamicPhaseEvents(receivePhase, true);
+setupDynamicPhaseEvents(handoverPhase, false);
 
-$$("textarea[data-bullet]").forEach(tx=>{
-  tx.addEventListener("focus",()=>{if(!tx.value.trim())tx.value="- "});
-  tx.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){
-      e.preventDefault();
-      const pos=tx.selectionStart;
-      const before=tx.value.substring(0,pos);
-      const after=tx.value.substring(tx.selectionEnd);
-      tx.value=before+"\n- "+after;
-      tx.selectionStart=tx.selectionEnd=pos+3;
+// Tự động gạch đầu dòng và viết hoa chữ cái đầu cho MỌI dòng
+$$("textarea[data-bullet]").forEach(tx => {
+  tx.addEventListener("focus", () => {
+    if(!tx.value.trim()){
+      tx.value = "- ";
     }
   });
-  tx.addEventListener("input",()=>{
-    const pos=tx.selectionStart;
-    tx.value=tx.value.replace(/(^|\n)(-\s+)([a-zà-ỹ])/g,(m,p1,p2,p3)=>p1+p2+p3.toUpperCase());
-    tx.setSelectionRange(pos,pos);
+  
+  tx.addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      e.preventDefault();
+      const pos = tx.selectionStart;
+      const before = tx.value.substring(0, pos);
+      const after = tx.value.substring(tx.selectionEnd);
+      tx.value = before + "\n- " + after;
+      tx.selectionStart = tx.selectionEnd = pos + 3;
+    }
   });
-  tx.addEventListener("change",saveDraft);
+
+  tx.addEventListener("input", () => {
+    const pos = tx.selectionStart;
+    const original = tx.value;
+    
+    const updated = original.replace(/(^|\n)(-\s+)([a-zà-ỹ])/g, (m, p1, p2, p3) => {
+      return p1 + p2 + p3.toUpperCase();
+    });
+
+    if (original !== updated) {
+      tx.value = updated;
+      tx.setSelectionRange(pos, pos);
+    }
+  });
+
+  tx.addEventListener("change", saveDraft);
 });
 
-$("#finalIssues").addEventListener("input",()=>{finalIssuesManualModified=true});
+$("#finalIssues").addEventListener("input", () => {
+  finalIssuesManualModified = true;
+});
 
 function setCurrentDateIfEmpty(){
-  if($("#workDate").value)return;
+  if($("#workDate").value) return;
   const d=new Date();
-  $("#workDate").value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0");
+  $("#workDate").value=`${y}-${m}-${day}`;
 }
-function syncShift(){$("#shiftTime").value=$("#shift").value.split("|")[1]}
+function syncShift(){ $("#shiftTime").value=$("#shift").value.split("|")[1] }
 function syncRoster(force=false){
-  const people=(roster[$("#kip").value]||[]).join(", ");
-  if(force||!$("#staff").value.trim())$("#staff").value=people;
-  if(force||!$("#handoverPeople").value.trim())$("#handoverPeople").value=people;
+  const currentKip = $("#kip").value;
+  const people = (roster[currentKip] || []).join(", ");
+  if(force || !$("#staff").value.trim()) $("#staff").value = people;
+  if(force || !$("#handoverPeople").value.trim()) $("#handoverPeople").value = people;
 }
 function syncReceiveRoster(){
   const k=$("#receiveKip").value;
-  if(k)$("#receivePeople").value=roster[k].join(", ")+` ( Kíp ${k})`;
+  if(k) $("#receivePeople").value=roster[k].join(", ") + ` ( Kíp ${k})`;
 }
 
 $("#shift").addEventListener("change",()=>{syncShift();saveDraft()});
 $("#kip").addEventListener("change",()=>{syncRoster(true);saveDraft()});
 $("#receiveKip").addEventListener("change",()=>{syncReceiveRoster();saveDraft()});
-["#workDate","#staff","#handoverPeople","#receivePeople"].forEach(s=>$(s).addEventListener("change",saveDraft));
-
-$("#issues").addEventListener("input",()=>{
-  if(!finalIssuesManualModified)$("#finalIssues").value=$("#issues").value;
+["#workDate","#staff","#handoverPeople","#receivePeople"].forEach(s=>{
+  $(s).addEventListener("change",saveDraft);
 });
 
-function cleanBulletText(text,compact=false){
-  const arr=String(text||"").split(/\n+/).map(x=>x.trim()).filter(x=>x&&x!=="-");
-  const sep=compact?"\n":"\n\n";
-  return arr.map(x=>{
-    let clean=x.replace(/^[-•*]\s*/,"");
-    if(clean)clean=clean.charAt(0).toUpperCase()+clean.slice(1);
-    return "- "+clean;
+// Tự động kế thừa Mục 4 sang Mục IV
+$("#issues").addEventListener("input", () => {
+  if(!finalIssuesManualModified){
+    $("#finalIssues").value = $("#issues").value;
+  }
+});
+
+function cleanBulletText(text, compact=false){
+  const arr = String(text||"").split(/\n+/).map(x=>x.trim()).filter(x => x && x !== "-");
+  const sep = compact ? "\n" : "\n\n";
+  return arr.map(x => {
+    let clean = x.replace(/^[-•*]\s*/, "");
+    if(clean.length > 0){
+      clean = clean.charAt(0).toUpperCase() + clean.slice(1);
+    }
+    return "- " + clean;
   }).join(sep);
 }
+
 function vnDate(s){
   const a=String(s||"").split("-");
-  return a.length===3?`${a[2]}/${a[1]}/${a[0]}`:s;
-}
-function chlorineDetail(p){
-  const meter=checked(p,"meter"),channel=checked(p,"channel"),supply=val(p,"chlorineSupply");
-  const parts=[];
-  if(supply)parts.push(`đang chạy clo nhánh cấp ${supply}`);
-  if(meter.length)parts.push(`qua bộ định lượng ${meter.join(", ")}`);
-  if(channel.length)parts.push(`xả châm liên tục xuống kênh ${channel.join(", ")}`);
-  return parts.join(" ");
-}
-function boosterText(p){
-  const a=checked(p,"booster");
-  if(!a.length)return "";
-  if(a.includes("Không hoạt động"))return "Không hoạt động";
-  return `đang chạy bơm ${a.join(", ")}`;
-}
-function boosterStudyText(p){
-  return checked(p,"boosterStudy").join(", ");
-}
-function washText(p){
-  if(val(p,"washState")!=="run")return "Dừng / Không hoạt động";
-  const pumps=checked(p,"washPump"),press=val(p,"washPressure");
-  let res="Đang hoạt động";
-  if(pumps.length)res+=` bơm ${pumps.join(", ")}`;
-  if(press)res+=`, áp suất: ${press} MPa`;
-  return res;
-}
-function neutralText(p){
-  if(val(p,"neutral")!=="run")return "Dừng / Không hoạt động";
-  const fans=checked(p,"neutralFan");
-  return "Đang chạy"+(fans.length?` quạt ${fans.join(", ")}`:"");
-}
-function returnPumpText(p){
-  if(val(p,"returnPump")!=="run")return "Ngừng";
-  const pumps=checked(p,"returnPumpUnit");
-  return "Đang chạy"+(pumps.length?` bơm ${pumps.join(", ")}`:"");
+  return a.length===3 ? `${a[2]}/${a[1]}/${a[0]}` : s;
 }
 
-function phaseText(p,isGroup=false){
+function chlorineDetail(p){
+  const meter=checked(p,"meter");
+  const channel=checked(p,"channel");
+  const supply=val(p,"chlorineSupply");
+  const parts=[];
+  if(supply) parts.push(`đang chạy clo nhánh cấp ${supply}`);
+  if(meter.length) parts.push(`qua bộ định lượng ${meter.join(", ")}`);
+  if(channel.length) parts.push(`xả châm liên tục xuống kênh ${channel.join(", ")}`);
+  return parts.join(" ");
+}
+
+function boosterText(p){
+  const a=checked(p,"booster");
+  if(!a.length) return "";
+  if(a.includes("Không hoạt động")) return "Không hoạt động";
+  return `đang chạy bơm ${a.join(", ")}`;
+}
+
+function washText(p){
+  const st=val(p,"washState");
+  if(st!=="run") return "Dừng / Không hoạt động";
+  const pumps=checked(p,"washPump");
+  const press=val(p,"washPressure");
+  let res="Đang hoạt động";
+  if(pumps.length) res+=` bơm ${pumps.join(", ")}`;
+  if(press) res+=`, áp suất: ${press} MPa`;
+  return res;
+}
+
+function neutralText(p){
+  const st=val(p,"neutral");
+  if(st!=="run") return "Dừng / Không hoạt động";
+  const fans=checked(p,"neutralFan");
+  return "Đang chạy" + (fans.length ? ` quạt ${fans.join(", ")}` : "");
+}
+
+function returnPumpText(p){
+  const st=val(p,"returnPump");
+  if(st!=="run") return "Ngừng";
+  const pumps=checked(p,"returnPumpUnit");
+  return "Đang chạy" + (pumps.length ? ` bơm ${pumps.join(", ")}` : "");
+}
+
+function phaseText(p, isGroup=false){
   const cwp=checked(p,"cwp");
   const screenState=val(p,"screen");
   const screenUnits=checked(p,"screenUnit");
-  const screen=screenState==="run"?`đang chạy lưới quay${screenUnits.length?" "+screenUnits.join(", "):""}`:"đang dừng";
-  const isChlorineRun=val(p,"chlorineState")==="run";
-  const tankA=val(p,"tankA")||"0",tankB=val(p,"tankB")||"0";
-  const totalCyl=val(p,"totalCylinder"),remainCyl=val(p,"remainingCylinder");
+  const screen=screenState==="run"
+    ? `đang chạy lưới quay${screenUnits.length ? " "+screenUnits.join(", ") : ""}`
+    : "đang dừng";
+  
+  const isChlorineRun = val(p,"chlorineState") === "run";
+  const tankA=val(p,"tankA");
+  const tankB=val(p,"tankB");
+  const totalCyl = val(p,"totalCylinder");
+  const remainCyl = val(p,"remainingCylinder");
 
-  let cwpStr=cwp.length?`chạy bơm tuần hoàn ${cwp.map(x=>"CWP "+x).join(", ")}`:"Đang dừng";
-  let cwpDis=vals(p,"dis").filter(Boolean).join("/")||"";
-  if(cwpDis&&!cwpDis.toLowerCase().includes("mpa"))cwpDis+=" MPa";
-  let tempVals=vals(p,"temp").filter(Boolean).join("/")||"";
-  if(tempVals&&!tempVals.includes("°C"))tempVals+=" °C";
+  let cwpStr = cwp.length ? `chạy bơm tuần hoàn ${cwp.map(x=>"CWP "+x).join(", ")}` : "Đang dừng";
+  let cwpDis = vals(p,"dis").filter(Boolean).join("/") || "";
+  if(cwpDis && !cwpDis.toLowerCase().includes("mpa")) cwpDis += " MPa";
 
-  const lines=[
-    `- Hệ thống bơm tuần hoàn: ${cwpStr}`,
-    `- Mức nước đầu kênh 1A/1B/2A/2B: ${vals(p,"level").join("/")}m`,
-    `- Tình trạng hoạt động của lưới quay: ${screen}`,
-    `- Tình trạng hoạt động của bơm rửa lưới: ${washText(p)}`,
-    `- Tình trạng hoạt động của máy cào rác: ${val(p,"rake")}`,
-    `- Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B: ${cwpDis}`,
-    `- Áp suất hệ thống dầu thủy lực van CNRV 1A/1B/2A/2B: ${vals(p,"hp").join("/")} MPa`,
-    `- Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B: ${tempVals}`,
-    `- Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B: ${vals(p,"oil").join("/")} lít`,
-    `- Bơm dầu thủy lực van CNRV 1A/1B/2A/2B: Bơm ${$$('[data-f="oilPump"]',p).map(x=>x.value).join("/")}`
+  let tempVals = vals(p,"temp").filter(Boolean).join("/") || "";
+  if(tempVals && !tempVals.includes("°C")) tempVals += " °C";
+
+  let naohStr = val(p,"naoh");
+  if(naohStr && !naohStr.toLowerCase().includes("mm")) naohStr += " mm";
+
+  let tankStr = (tankA || tankB) ? `${tankA || "0"}/${tankB || "0"} mm` : "0/0 mm";
+
+  const lines = [
+`- Hệ thống bơm tuần hoàn: ${cwpStr}`,
+`- Mức nước đầu kênh 1A/1B/2A/2B: ${vals(p,"level").join("/")}m`,
+`- Tình trạng hoạt động của lưới quay: ${screen}`,
+`- Tình trạng hoạt động của bơm rửa lưới: ${washText(p)}`,
+`- Tình trạng hoạt động của máy cào rác: ${val(p,"rake")}`,
+`- Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B: ${cwpDis}`,
+`- Áp suất hệ thống dầu thủy lực van CNRV 1A/1B/2A/2B: ${vals(p,"hp").join("/")} MPa`,
+`- Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B: ${tempVals}`,
+`- Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B: ${vals(p,"oil").join("/")} lít`,
+`- Bơm dầu thủy lực van CNRV 1A/1B/2A/2B: Bơm ${$$('[data-f="oilPump"]',p).map(x=>x.value).join("/")}`
   ];
 
   if(isChlorineRun){
-    lines.push(`- Hệ thống nhà clo: ${chlorineDetail(p)||"Đang chạy"}`);
+    lines.push(`- Hệ thống nhà clo: ${chlorineDetail(p) || "Đang chạy"}`);
     lines.push(`- Bơm tăng áp nước biển: ${boosterText(p)}`);
-    lines.push(`- Bộ học: ${boosterStudyText(p)}`);
     lines.push(`- Nồng độ châm clo tại kênh 1A/1B/2A/2B: ${vals(p,"ppm").join("/")}`);
-  }else{
-    lines.push("- Hệ thống nhà clo: Dừng");
+  } else {
+    lines.push(`- Hệ thống nhà clo: Dừng`);
   }
 
   lines.push(
-    `- Hệ thống trung hòa clo: ${neutralText(p)}`,
-    `- Khối lượng NaOH trong bể chứa: ${val(p,"naoh")}`,
-    `- Hệ thống bơm nước hồi: ${returnPumpText(p)}`,
-    `- Mức bể nước thu hồi A/B: ${tankA}/${tankB}`,
-    `- Tổng số bình Clo: ${totalCyl}`,
-    `- Tổng số bình Clo khả dụng: ${remainCyl}`
+`- Hệ thống trung hòa clo: ${neutralText(p)}`,
+`- Khối lượng NaOH trong bể chứa: ${naohStr}`,
+`- Hệ thống bơm nước hồi: ${returnPumpText(p)}`,
+`- Mức bể nước thu hồi A/B: ${tankStr}`,
+`- Tổng số bình Clo: ${totalCyl}`,
+`- Tổng số bình Clo khả dụng: ${remainCyl}`
   );
-  return lines.join(isGroup?"\n":"\n\n");
+
+  return lines.join(isGroup ? "\n" : "\n\n");
 }
 
 function buildMailReport(){
-  const [shiftName]=$("#shift").value.split("|");
+  const [shiftName]= $("#shift").value.split("|");
+  const prev=cleanBulletText($("#previousAbnormal").value, false);
+  const issues=cleanBulletText($("#issues").value, false);
+  const during=cleanBulletText($("#duringText").value, false);
+  const final=cleanBulletText($("#finalIssues").value, false);
+  const staff=$("#staff").value.trim();
+
   return `Kính gửi: Lãnh đạo PXVH – NMNĐ Quảng Trạch.
 
            Cc: CBNV PXVH – NMNĐ Quảng Trạch.
@@ -664,31 +843,31 @@ HV Trạm tuần hoàn, clo - Trạm nước lắng, hồi (Kíp ${$("#kip").val
 
 I. Nhận ca:
 
-1. Nhân sự: ${$("#staff").value.trim()}
+1. Nhân sự: ${staff}
 
 2. Tình trạng thiết bị đầu ca:
 
-${phaseText(receivePhase,false)}
+${phaseText(receivePhase, false)}
 
 3. Bất thường ca trước:
 
-${cleanBulletText($("#previousAbnormal").value,false)}
+${prev}
 
 4. Tồn tại:
 
-${cleanBulletText($("#issues").value,false)}
+${issues}
 
 II. Trong ca:
 
-${cleanBulletText($("#duringText").value,false)}
+${during}
 
 III. Giao ca:
 
-${phaseText(handoverPhase,false)}
+${phaseText(handoverPhase, false)}
 
 IV. Bất thường, khiếm khuyết, lưu ý:
 
-${cleanBulletText($("#finalIssues").value,false)}
+${final}
 
 Giao ca: ${$("#handoverPeople").value.trim()}
 
@@ -700,68 +879,74 @@ Trân trọng./.`;
 }
 
 function buildGroupReport(){
-  const [shiftName]=$("#shift").value.split("|");
+  const [shiftName]= $("#shift").value.split("|");
+  const prev=cleanBulletText($("#previousAbnormal").value, true);
+  const issues=cleanBulletText($("#issues").value, true);
+  const staff=$("#staff").value.trim();
+
   return `Báo cáo TC, TKLM, MT: Tình hình thiết bị vận hành HV Trạm tuần hoàn, clo - Trạm nước lắng , hồi (Kíp ${$("#kip").value}) đầu ca ${shiftName} ngày ${vnDate($("#workDate").value)} (từ ${$("#shiftTime").value}) như sau:
 I. Nhận ca:
-1. Nhân sự: ${$("#staff").value.trim()}
+1. Nhân sự: ${staff}
 2. Tình trạng thiết bị đầu ca:
-${phaseText(receivePhase,true)}
+${phaseText(receivePhase, true)}
 3. Thao tác ca trước:
-${cleanBulletText($("#previousAbnormal").value,true)}
+${prev}
 4. Tình trạng bất thường tồn đọng của thiết bị:
-${cleanBulletText($("#issues").value,true)}`;
+${issues}`;
 }
 
-async function copyText(text,msg){
+async function copyText(text, msg){
   saveDraft();
   let ok=false;
   try{
-    if(navigator.clipboard&&window.isSecureContext){
-      await navigator.clipboard.writeText(text);
-      ok=true;
-    }
+    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); ok=true; }
   }catch(e){}
   if(!ok){
-    $("#reportText").value=text;
-    $("#reportText").focus();
-    $("#reportText").select();
-    try{ok=document.execCommand("copy")}catch(e){}
+    $("#reportText").value = text;
+    $("#reportText").focus(); $("#reportText").select();
+    try{ ok=document.execCommand("copy"); }catch(e){}
   }
-  $("#status").textContent=ok?msg:"Đã chọn toàn bộ nội dung — hãy chọn Copy.";
+  $("#status").textContent=ok ? msg : "Đã chọn toàn bộ nội dung — hãy chọn Copy.";
 }
 
 $("#copyMailReport").addEventListener("click",async()=>{
-  const content=buildMailReport();
-  $("#reportText").value=content;
-  await copyText(content,"Đã sao chép nội dung gửi Email.");
+  const content = buildMailReport();
+  $("#reportText").value = content;
+  await copyText(content, "Đã sao chép nội dung gửi Email.");
 });
+
 $("#copyGroupReport").addEventListener("click",async()=>{
-  const content=buildGroupReport();
-  $("#reportText").value=content;
-  await copyText(content,"Đã sao chép nội dung gửi Group.");
+  const content = buildGroupReport();
+  $("#reportText").value = content;
+  await copyText(content, "Đã sao chép nội dung gửi Group.");
 });
 
 function switchTab(targetTab){
-  if(targetTab==="handover"&&!finalIssuesManualModified&&!$("#finalIssues").value.trim()){
-    $("#finalIssues").value=$("#issues").value;
+  if(targetTab === "handover" && !finalIssuesManualModified && !$("#finalIssues").value.trim()){
+    $("#finalIssues").value = $("#issues").value;
   }
-  $$(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===targetTab));
-  $$("[data-page]").forEach(p=>p.classList.toggle("hidden",p.dataset.page!==targetTab));
-  if(targetTab==="report")$("#reportText").value=buildMailReport();
-  window.scrollTo({top:0,behavior:"instant"});
+  $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));
+  $$("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
+  if(targetTab === "report") $("#reportText").value = buildMailReport();
+  
+  // Tự động cuộn lên đầu tức thì khi chuyển tab
+  window.scrollTo({ top: 0, behavior: "instant" });
 }
-$$(".tab").forEach(btn=>btn.addEventListener("click",()=>switchTab(btn.dataset.tab)));
+
+$$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  switchTab(btn.dataset.tab);
+}));
 
 function serializePhase(p){
   const obj={};
-  $$("[data-f]",p).forEach(e=>{
+  $$("[data-f]",p).forEach((e)=>{
     const key=e.dataset.f;
     if(e.type==="checkbox"){
-      if(!obj[key])obj[key]=[];
-      if(e.checked)obj[key].push(e.value);
+      if(!obj[key]) obj[key]=[];
+      if(e.checked) obj[key].push(e.value);
     }else{
-      if(obj[key]===undefined)obj[key]=e.value;
-      else if(Array.isArray(obj[key]))obj[key].push(e.value);
+      if(obj[key]===undefined) obj[key]=e.value;
+      else if(Array.isArray(obj[key])) obj[key].push(e.value);
       else obj[key]=[obj[key],e.value];
     }
   });
@@ -772,14 +957,14 @@ function restorePhase(p,obj={}){
   const groups={};
   $$("[data-f]",p).forEach(e=>(groups[e.dataset.f]??=[]).push(e));
   Object.entries(groups).forEach(([key,els])=>{
-    if(!(key in obj))return;
+    if(!(key in obj)) return;
     if(els[0].type==="checkbox"){
       const arr=Array.isArray(obj[key])?obj[key]:[];
       els.forEach(e=>e.checked=arr.includes(e.value));
     }else{
       const v=obj[key];
-      if(Array.isArray(v))els.forEach((e,i)=>{if(v[i]!==undefined)e.value=v[i]});
-      else if(els[0])els[0].value=v;
+      if(Array.isArray(v)) els.forEach((e,i)=>{if(v[i]!==undefined)e.value=v[i]});
+      else if(els[0]) els[0].value=v;
     }
   });
   updateCheckboxVisuals(p);
@@ -788,20 +973,13 @@ function restorePhase(p,obj={}){
 function saveDraft(){
   try{
     const data={
-      workDate:$("#workDate").value,
-      kip:$("#kip").value,
-      shift:$("#shift").value,
-      staff:$("#staff").value,
-      previousAbnormal:$("#previousAbnormal").value,
-      issues:$("#issues").value,
-      duringText:$("#duringText").value,
-      finalIssues:$("#finalIssues").value,
-      finalIssuesManualModified,
+      workDate:$("#workDate").value, kip:$("#kip").value, shift:$("#shift").value,
+      staff:$("#staff").value, previousAbnormal:$("#previousAbnormal").value,
+      issues:$("#issues").value, duringText:$("#duringText").value,
+      finalIssues:$("#finalIssues").value, finalIssuesManualModified,
       handoverPeople:$("#handoverPeople").value,
-      receiveKip:$("#receiveKip").value,
-      receivePeople:$("#receivePeople").value,
-      receive:serializePhase(receivePhase),
-      handover:serializePhase(handoverPhase)
+      receiveKip:$("#receiveKip").value, receivePeople:$("#receivePeople").value,
+      receive:serializePhase(receivePhase), handover:serializePhase(handoverPhase)
     };
     localStorage.setItem(STORE_KEY,JSON.stringify(data));
   }catch(e){}
@@ -809,64 +987,72 @@ function saveDraft(){
 
 function loadDraft(){
   try{
-    const raw=localStorage.getItem(STORE_KEY);
-    if(!raw)return false;
+    const raw=localStorage.getItem(STORE_KEY); if(!raw) return false;
     const d=JSON.parse(raw);
-    if(d.workDate)$("#workDate").value=d.workDate;
-    if(d.kip)$("#kip").value=d.kip;
-    if(d.shift)$("#shift").value=d.shift;
+    if(d.workDate) $("#workDate").value=d.workDate;
+    if(d.kip) $("#kip").value=d.kip;
+    if(d.shift) $("#shift").value=d.shift;
     $("#staff").value=d.staff||"";
     $("#previousAbnormal").value=d.previousAbnormal||"";
-    $("#issues").value=d.issues||"";
-    $("#duringText").value=d.duringText!==undefined&&d.duringText!==""?d.duringText:DEFAULT_DURING_TEXT;
+    $("#issues").value = d.issues || "";
+    $("#duringText").value=(d.duringText !== undefined && d.duringText !== "") ? d.duringText : DEFAULT_DURING_TEXT;
     $("#finalIssues").value=d.finalIssues||"";
-    finalIssuesManualModified=d.finalIssuesManualModified===true;
+    finalIssuesManualModified = d.finalIssuesManualModified === true;
     $("#handoverPeople").value=d.handoverPeople||"";
     $("#receiveKip").value=d.receiveKip||"";
     $("#receivePeople").value=d.receivePeople||"";
-    restorePhase(receivePhase,d.receive);
-    restorePhase(handoverPhase,d.handover);
+    restorePhase(receivePhase,d.receive); restorePhase(handoverPhase,d.handover);
     return true;
   }catch(e){return false}
 }
 
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveDraft()});
-window.addEventListener("pagehide",saveDraft);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") saveDraft();
+});
+window.addEventListener("pagehide", saveDraft);
 
+// Bắt đầu ca mới (Giữ lại Tồn tại thiết bị)
 $("#newShift").addEventListener("click",()=>{
-  if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?"))return;
+  if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
+  
+  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;
 
-  $$(".phase input[type='checkbox']").forEach(cb=>cb.checked=false);
-  $$(".phase input:not([type='checkbox'])").forEach(inp=>inp.value="");
-  $$(".phase select").forEach(sel=>sel.selectedIndex=0);
+  $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
+  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");
+  $$(".phase select").forEach(sel => sel.selectedIndex = 0);
+  
+  $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");
+  $$('[data-f="oil"]', handoverPhase).forEach(el => el.value = "190");
 
-  $$('[data-f="oil"]',receivePhase).forEach(el=>el.value="190");
-  $$('[data-f="oil"]',handoverPhase).forEach(el=>el.value="190");
+  $("#previousAbnormal").value = "";
+  
+  $("#issues").value = inheritedIssues;
+  $("#finalIssues").value = inheritedIssues;
+  finalIssuesManualModified = false;
 
-  $("#previousAbnormal").value="";
-  $("#issues").value="";
-  $("#duringText").value=DEFAULT_DURING_TEXT;
-  $("#finalIssues").value="";
-  finalIssuesManualModified=false;
-  $("#receiveKip").value="";
-  $("#receivePeople").value="";
+  $("#duringText").value = DEFAULT_DURING_TEXT;
+
+  $("#receiveKip").value = "";
+  $("#receivePeople").value = "";
 
   const d=new Date();
-  $("#workDate").value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0");
+  $("#workDate").value=`${y}-${m}-${day}`;
+  
   syncShift();
   syncRoster(true);
 
-  [receivePhase,handoverPhase].forEach(p=>{
+  [receivePhase, handoverPhase].forEach(p => {
     updateCheckboxVisuals(p);
-    $('[data-f="screen"]',p).dispatchEvent(new Event("change"));
-    $('[data-f="washState"]',p).dispatchEvent(new Event("change"));
-    $('[data-f="chlorineState"]',p).dispatchEvent(new Event("change"));
-    $('[data-f="neutral"]',p).dispatchEvent(new Event("change"));
-    $('[data-f="returnPump"]',p).dispatchEvent(new Event("change"));
+    $('[data-f="screen"]', p).dispatchEvent(new Event("change"));
+    $('[data-f="washState"]', p).dispatchEvent(new Event("change"));
+    $('[data-f="chlorineState"]', p).dispatchEvent(new Event("change"));
+    $('[data-f="neutral"]', p).dispatchEvent(new Event("change"));
+    $('[data-f="returnPump"]', p).dispatchEvent(new Event("change"));
   });
 
   saveDraft();
+
   switchTab("general");
 });
 
@@ -875,13 +1061,13 @@ setCurrentDateIfEmpty();
 syncShift();
 syncRoster(false);
 
-[receivePhase,handoverPhase].forEach(p=>{
+[receivePhase, handoverPhase].forEach(p => {
   updateCheckboxVisuals(p);
-  $('[data-f="screen"]',p).dispatchEvent(new Event("change"));
-  $('[data-f="washState"]',p).dispatchEvent(new Event("change"));
-  $('[data-f="chlorineState"]',p).dispatchEvent(new Event("change"));
-  $('[data-f="neutral"]',p).dispatchEvent(new Event("change"));
-  $('[data-f="returnPump"]',p).dispatchEvent(new Event("change"));
+  $('[data-f="screen"]', p).dispatchEvent(new Event("change"));
+  $('[data-f="washState"]', p).dispatchEvent(new Event("change"));
+  $('[data-f="chlorineState"]', p).dispatchEvent(new Event("change"));
+  $('[data-f="neutral"]', p).dispatchEvent(new Event("change"));
+  $('[data-f="returnPump"]', p).dispatchEvent(new Event("change"));
 });
 })();
 </script>
