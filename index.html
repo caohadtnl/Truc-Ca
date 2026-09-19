@@ -319,7 +319,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </main>
 
 <script>
-// XỬ LÝ ĐĂNG NHẬP RIÊNG BIỆT ĐẢM BẢO HOẠT ĐỘNG 100%
+// XỬ LÝ ĐĂNG NHẬP RIÊNG BIỆT
 const APP_PASS = "Ndqt1@hacn";
 const AUTH_KEY = "qt_shift_auth_state";
 
@@ -516,9 +516,17 @@ $("#receiveMount").innerHTML = phaseHTML("2. Tình trạng thiết bị đầu c
 $("#handoverMount").innerHTML = phaseHTML("III. Giao ca");
 
 const receivePhase = $("#receiveMount .phase");
-const handoverPhase = $("#handoverMount .phase");  function normalizeDotDecimal(v){   let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");   const first = s.indexOf(".");   if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");   return s; } function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value))}
-function val(box,f){const e=$(`[data-f="${f}"]`,box);return e ? e.value.trim().replace(/,/g,".") : ""}
-function checked(box,f){return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.value)}
+const handoverPhase = $("#handoverMount .phase");  function normalizeDotDecimal(v){   let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");   const first = s.indexOf(".");   if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");   return s; }  function vals(box,f){   return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value));
+}
+
+function val(box,f){
+  const e=$(`[data-f="${f}"]`,box);
+  return e ? e.value.trim().replace(/,/g,".") : "";
+}
+
+function checked(box,f){
+  return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.value);
+}
 
 function updateCheckboxVisuals(box){
   $$('input[type="checkbox"]', box).forEach(cb => {
@@ -653,13 +661,18 @@ function setCurrentDateIfEmpty(){
   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0");
   $("#workDate").value=`${y}-${m}-${day}`;
 }
-function syncShift(){ $("#shiftTime").value=$("#shift").value.split("|")[1] }
+
+function syncShift(){
+  $("#shiftTime").value=$("#shift").value.split("|")[1];
+}
+
 function syncRoster(force=false){
   const currentKip = $("#kip").value;
   const people = (roster[currentKip] || []).join(", ");
   if(force || !$("#staff").value.trim()) $("#staff").value = people;
   if(force || !$("#handoverPeople").value.trim()) $("#handoverPeople").value = people;
 }
+
 function syncReceiveRoster(){
   const k=$("#receiveKip").value;
   if(k) $("#receivePeople").value=roster[k].join(", ") + ` ( Kíp ${k})`;
@@ -672,7 +685,7 @@ $("#receiveKip").addEventListener("change",()=>{syncReceiveRoster();saveDraft()}
   $(s).addEventListener("change",saveDraft);
 });
 
-// Tự động kế thừa Mục 4 sang Mục IV
+// Kế thừa Tồn tại thiết bị
 $("#issues").addEventListener("input", () => {
   if(!finalIssuesManualModified){
     $("#finalIssues").value = $("#issues").value;
@@ -906,7 +919,7 @@ function switchTab(targetTab){
   }
   $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));   $$
 ("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
-  if(targetTab === "report") $("#reportText").value = buildMailReport();      // Tự động cuộn lên đỉnh tức thì khi chuyển tab   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  if(targetTab === "report") $("#reportText").value = buildMailReport();   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
   switchTab(btn.dataset.tab);
 }));
 
@@ -969,7 +982,7 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", saveDraft);
 
-// Bắt đầu ca mới (Giữ lại Tồn tại thiết bị)
+// Bắt đầu ca mới
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
   
@@ -1008,7 +1021,6 @@ $("#newShift").addEventListener("click",()=>{
   });
 
   saveDraft();
-
   switchTab("general");
 });
 
