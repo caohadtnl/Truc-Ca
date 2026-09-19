@@ -217,11 +217,11 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 
 <main class="app" id="app">
   <div class="tabs">
-    <button class="tab active" type="button" data-tab="general">Thông tin</button>
-    <button class="tab" type="button" data-tab="receive">Nhận ca</button>
-    <button class="tab" type="button" data-tab="during">Trong ca</button>
-    <button class="tab" type="button" data-tab="handover">Giao ca</button>
-    <button class="tab" type="button" data-tab="report">Báo cáo</button>
+    <button class="tab active" type="button" onclick="switchTab('general')" data-tab="general">Thông tin</button>
+    <button class="tab" type="button" onclick="switchTab('receive')" data-tab="receive">Nhận ca</button>
+    <button class="tab" type="button" onclick="switchTab('during')" data-tab="during">Trong ca</button>
+    <button class="tab" type="button" onclick="switchTab('handover')" data-tab="handover">Giao ca</button>
+    <button class="tab" type="button" onclick="switchTab('report')" data-tab="report">Báo cáo</button>
   </div>
 
   <section data-page="general">
@@ -319,6 +319,32 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </main>
 
 <script>
+// HÀM CHUYỂN TAB ĐẶT Ở NGOÀI TOÀN TRANG ĐẢM BẢO LUÔN BẤM ĐƯỢC
+function switchTab(targetTab){
+  const targetBtn = document.querySelector(`.tab[data-tab="${targetTab}"]`);
+  if(!targetBtn) return;
+
+  const finalIssuesEl = document.getElementById("finalIssues");
+  const issuesEl = document.getElementById("issues");
+  if(targetTab === "handover" && finalIssuesEl && issuesEl && !finalIssuesEl.value.trim()){
+    finalIssuesEl.value = issuesEl.value;
+  }
+
+  document.querySelectorAll(".tab").forEach(x => {
+    x.classList.toggle("active", x.dataset.tab === targetTab);
+  });
+  
+  document.querySelectorAll("[data-page]").forEach(p => {
+    p.classList.toggle("hidden", p.dataset.page !== targetTab);
+  });
+
+  if(targetTab === "report" && typeof window.buildMailReportFunc === "function"){
+    document.getElementById("reportText").value = window.buildMailReportFunc();
+  }
+  
+  window.scrollTo(0, 0);
+}
+
 (() => {
 const app = document.getElementById('app');
 const APP_PASS = "Ndqt1@hacn";
@@ -366,11 +392,11 @@ const roster = {
   E:["Phạm Tiến Sỹ","Trịnh Dương Thọ"]
 };
 const U = ["1A","1B","2A","2B"];
-const STORE_KEY = "qt_shift_report_v20";
+const STORE_KEY = "qt_shift_report_v21";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
 
-const $ = (s, el=app) => el.querySelector(s); const $$ = (s, el=app) => [...el.querySelectorAll(s)];
+const $ = (s, el=document) => el.querySelector(s); const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 
 function phaseHTML(title){
 return `
@@ -658,18 +684,13 @@ function setCurrentDateIfEmpty(){
   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0");
   $("#workDate").value=`${y}-${m}-${day}`;
 }
-
-function syncShift(){
-  $("#shiftTime").value=$("#shift").value.split("|")[1];
-}
-
+function syncShift(){ $("#shiftTime").value=$("#shift").value.split("|")[1] }
 function syncRoster(force=false){
   const currentKip = $("#kip").value;
   const people = (roster[currentKip] || []).join(", ");
   if(force || !$("#staff").value.trim()) $("#staff").value = people;
   if(force || !$("#handoverPeople").value.trim()) $("#handoverPeople").value = people;
 }
-
 function syncReceiveRoster(){
   const k=$("#receiveKip").value;
   if(k) $("#receivePeople").value=roster[k].join(", ") + ` ( Kíp ${k})`;
@@ -867,6 +888,9 @@ Kính báo cáo.
 Trân trọng./.`;
 }
 
+// Gán ra biến window để hàm switchTab bên ngoài có thể gọi an toàn
+window.buildMailReportFunc = buildMailReport;
+
 function buildGroupReport(){
   const [shiftName]= $("#shift").value.split("|");
   const prev=cleanBulletText($("#previousAbnormal").value, true);
@@ -909,16 +933,6 @@ $("#copyGroupReport").addEventListener("click",async()=>{
   $("#reportText").value = content;
   await copyText(content, "Đã sao chép nội dung gửi Group.");
 });
-
-function switchTab(targetTab){
-  if(targetTab === "handover" && !finalIssuesManualModified && !$("#finalIssues").value.trim()){
-    $("#finalIssues").value = $("#issues").value;
-  }
-  $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));   $$
-("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
-  if(targetTab === "report") $("#reportText").value = buildMailReport();   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
-  switchTab(btn.dataset.tab);
-}));
 
 function serializePhase(p){
   const obj={};
