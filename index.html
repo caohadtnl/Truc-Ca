@@ -173,9 +173,9 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .btn-reset-span{grid-column:1/-1}
 
-/* Màn hình khóa xác thực mật khẩu */
+/* MÀN HÌNH KHÓA XÁC THỰC MẬT KHẨU */
 #loginOverlay{
-  position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:9999;
+  position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:99999;
   display:flex;align-items:center;justify-content:center;padding:16px;
   backdrop-filter:blur(8px);
 }
@@ -202,12 +202,13 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </head>
 <body>
 
+<!-- MÀN HÌNH KHÓA -->
 <div id="loginOverlay">
   <div class="login-box">
     <h2>Xác thực kíp trực</h2>
     <p>Trạm tuần hoàn, clo - Trạm nước lắng, hồi<br>NMNĐ Quảng Trạch</p>
-    <input type="password" id="appPass" placeholder="Nhập mật khẩu truy cập" autocomplete="current-password">
-    <button class="btn primary" type="button" id="btnLogin" style="width:100%;min-height:46px;font-size:15px">Mở sổ trực ca</button>
+    <input type="password" id="appPass" placeholder="Nhập mật khẩu truy cập" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="btn primary" type="button" id="btnLogin" onclick="doLogin()" style="width:100%;min-height:46px;font-size:15px">Mở sổ trực ca</button>
     <div id="loginMsg" class="login-error"></div>
   </div>
 </div>
@@ -318,43 +319,47 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </main>
 
 <script>
-(() => {
-const app = document.getElementById('app');
-const APP_PASS = "Tthndqt1";
+// XỬ LÝ ĐĂNG NHẬP RIÊNG BIỆT ĐẢM BẢO HOẠT ĐỘNG 100%
+const APP_PASS = "Ndqt1@hacn";
 const AUTH_KEY = "qt_shift_auth_state";
 
-// Xác thực mật khẩu
-const loginOverlay = document.getElementById('loginOverlay');
-const appPass = document.getElementById('appPass');
-const btnLogin = document.getElementById('btnLogin');
-const loginMsg = document.getElementById('loginMsg');
-
 function checkAuth(){
+  const overlay = document.getElementById('loginOverlay');
   if(localStorage.getItem(AUTH_KEY) === "true"){
-    loginOverlay.classList.add("hidden");
+    overlay.classList.add("hidden");
   } else {
-    loginOverlay.classList.remove("hidden");
-    setTimeout(() => appPass.focus(), 200);
+    overlay.classList.remove("hidden");
+    setTimeout(() => {
+      const p = document.getElementById('appPass');
+      if(p) p.focus();
+    }, 200);
   }
 }
 
 function doLogin(){
-  if(appPass.value === APP_PASS){
+  const passInp = document.getElementById('appPass');
+  const msg = document.getElementById('loginMsg');
+  const overlay = document.getElementById('loginOverlay');
+  
+  if(!passInp) return;
+  const entered = passInp.value.trim();
+  
+  if(entered === APP_PASS){
     localStorage.setItem(AUTH_KEY, "true");
-    loginOverlay.classList.add("hidden");
+    overlay.classList.add("hidden");
+    msg.textContent = "";
   } else {
-    loginMsg.textContent = "Mật khẩu không đúng, vui lòng nhập lại.";
-    appPass.value = "";
-    appPass.focus();
+    msg.textContent = "Mật khẩu không đúng, vui lòng nhập lại.";
+    passInp.value = "";
+    passInp.focus();
   }
 }
 
-btnLogin.addEventListener("click", doLogin);
-appPass.addEventListener("keydown", (e) => {
-  if(e.key === "Enter") doLogin();
-});
-
 checkAuth();
+
+// LOGIC BÁO CÁO CA TRỰC
+(() => {
+const app = document.getElementById('app');
 
 const roster = {
   A:["Nguyễn Thành Trung","Đào Ngọc Văn"],
@@ -364,7 +369,7 @@ const roster = {
   E:["Phạm Tiến Sỹ","Trịnh Dương Thọ"]
 };
 const U = ["1A","1B","2A","2B"];
-const STORE_KEY = "qt_shift_report_v16";
+const STORE_KEY = "qt_shift_report_v17";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
 
@@ -901,7 +906,7 @@ function switchTab(targetTab){
   }
   $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));   $$
 ("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
-  if(targetTab === "report") $("#reportText").value = buildMailReport();      // Tự động cuộn lên đầu tức thì khi chuyển tab   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  if(targetTab === "report") $("#reportText").value = buildMailReport();      // Tự động cuộn lên đỉnh tức thì khi chuyển tab   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
   switchTab(btn.dataset.tab);
 }));
 
