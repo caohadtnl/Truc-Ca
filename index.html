@@ -462,6 +462,7 @@ return `
       <div><label class="field">Bộ định lượng</label><div class="checks">${["A","B","C","D"].map(x=>`<label class="choice"><input type="checkbox" data-f="meter" value="${x}">${x}</label>`).join("")}</div></div>
       <div><label class="field">Xả xuống kênh</label><div class="checks">${U.map(x=>`<label class="choice"><input type="checkbox" data-f="channel" value="${x}">${x}</label>`).join("")}</div></div>
       <div style="grid-column:1/-1"><label class="field">Bơm tăng áp nước biển</label><div class="checks">${["A","B","C","D","Không hoạt động"].map(x=>`<label class="choice"><input type="checkbox" data-f="booster" value="${x}">${x}</label>`).join("")}</div></div>
+      <div style="grid-column:1/-1"><label class="field">Bộ lọc nước biển A/B</label><div class="checks">${["A","B"].map(x=>`<label class="choice"><input type="checkbox" data-f="boosterFilter" value="${x}">${x}</label>`).join("")}</div></div>
     </div>
     <div class="metric">
       <label class="field">Nồng độ châm clo 1A/1B/2A/2B (ppm)</label>
@@ -743,6 +744,18 @@ function boosterText(p){
   return `đang chạy bơm ${a.join(", ")}`;
 }
 
+function boosterFilterText(p){
+  const a=checked(p,"boosterFilter");
+
+  if(!a.length) return "Không hoạt động";
+
+  if(a.length === 2 && a.includes("A") && a.includes("B")){
+    return "Đang chạy bộ lọc A và B";
+  }
+
+  return `Đang chạy bộ lọc ${a[0]}`;
+}
+
 function washText(p){
   const st=val(p,"washState");
   if(st!=="run") return "Dừng / Không hoạt động";
@@ -810,6 +823,7 @@ function phaseText(p, isGroup=false){
   if(isChlorineRun){
     lines.push(`- Hệ thống nhà clo: ${chlorineDetail(p) || "Đang chạy"}`);
     lines.push(`- Bơm tăng áp nước biển: ${boosterText(p)}`);
+    lines.push(`- Bộ lọc: ${boosterFilterText(p)}`);
     lines.push(`- Nồng độ châm clo tại kênh 1A/1B/2A/2B: ${vals(p,"ppm").join("/")}`);
   } else {
     lines.push(`- Hệ thống nhà clo: Dừng`);
