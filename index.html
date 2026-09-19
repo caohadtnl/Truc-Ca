@@ -319,7 +319,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </main>
 
 <script>
-// XỬ LÝ ĐĂNG NHẬP RIÊNG BIỆT
+// XỬ LÝ ĐĂNG NHẬP RIÊNG BIỆT - MẬT KHẨU MỚI: Ndqt1@hacn
 const APP_PASS = "Ndqt1@hacn";
 const AUTH_KEY = "qt_shift_auth_state";
 
@@ -369,7 +369,7 @@ const roster = {
   E:["Phạm Tiến Sỹ","Trịnh Dương Thọ"]
 };
 const U = ["1A","1B","2A","2B"];
-const STORE_KEY = "qt_shift_report_v17";
+const STORE_KEY = "qt_shift_report_v18";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
 
@@ -986,7 +986,7 @@ window.addEventListener("pagehide", saveDraft);
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
   
-  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;    $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
+  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;   $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
   $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");   $$
 (".phase select").forEach(sel => sel.selectedIndex = 0);
   
