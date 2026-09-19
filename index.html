@@ -339,10 +339,9 @@ function checkAuth(){
 }
 
 function doLogin(){
-  if(appPass.value.trim() === APP_PASS){
+  if(appPass.value === APP_PASS){
     localStorage.setItem(AUTH_KEY, "true");
     loginOverlay.classList.add("hidden");
-    loginMsg.textContent = "";
   } else {
     loginMsg.textContent = "Mật khẩu không đúng, vui lòng nhập lại.";
     appPass.value = "";
@@ -365,11 +364,12 @@ const roster = {
   E:["Phạm Tiến Sỹ","Trịnh Dương Thọ"]
 };
 const U = ["1A","1B","2A","2B"];
-const STORE_KEY = "qt_shift_report_v16";
+const STORE_KEY = "qt_shift_report_v15";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
 
-const $ = (s, el=app) => el.querySelector(s); const $$ = (s, el=app) => [...el.querySelectorAll(s)];
+const $ = (s, el=app) => el.querySelector(s);
+const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
 function phaseHTML(title){
 return `
@@ -462,7 +462,6 @@ return `
       <div><label class="field">Bộ định lượng</label><div class="checks">${["A","B","C","D"].map(x=>`<label class="choice"><input type="checkbox" data-f="meter" value="${x}">${x}</label>`).join("")}</div></div>
       <div><label class="field">Xả xuống kênh</label><div class="checks">${U.map(x=>`<label class="choice"><input type="checkbox" data-f="channel" value="${x}">${x}</label>`).join("")}</div></div>
       <div style="grid-column:1/-1"><label class="field">Bơm tăng áp nước biển</label><div class="checks">${["A","B","C","D","Không hoạt động"].map(x=>`<label class="choice"><input type="checkbox" data-f="booster" value="${x}">${x}</label>`).join("")}</div></div>
-      <div style="grid-column:1/-1"><label class="field">Bộ lọc đang dùng</label><div class="checks">${["A","B"].map(x=>`<label class="choice"><input type="checkbox" data-f="filterUnit" value="${x}">Bộ lọc ${x}</label>`).join("")}</div></div>
     </div>
     <div class="metric">
       <label class="field">Nồng độ châm clo 1A/1B/2A/2B (ppm)</label>
@@ -512,7 +511,15 @@ $("#receiveMount").innerHTML = phaseHTML("2. Tình trạng thiết bị đầu c
 $("#handoverMount").innerHTML = phaseHTML("III. Giao ca");
 
 const receivePhase = $("#receiveMount .phase");
-const handoverPhase = $("#handoverMount .phase");  function normalizeDotDecimal(v){   let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");   const first = s.indexOf(".");   if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");   return s; } function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value))}
+const handoverPhase = $("#handoverMount .phase");
+
+function normalizeDotDecimal(v){
+  let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");
+  const first = s.indexOf(".");
+  if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");
+  return s;
+}
+function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value))}
 function val(box,f){const e=$(`[data-f="${f}"]`,box);return e ? e.value.trim().replace(/,/g,".") : ""}
 function checked(box,f){return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.value)}
 
@@ -524,7 +531,8 @@ function updateCheckboxVisuals(box){
 }
 
 function syncReceiveToHandover(){
-  const srcEls = $$("input, select", receivePhase);   const dstEls = $$("input, select", handoverPhase);
+  const srcEls = $$("input, select", receivePhase);
+  const dstEls = $$("input, select", handoverPhase);
   
   srcEls.forEach((s, i) => {
     const d = dstEls[i];
@@ -585,7 +593,14 @@ function setupDynamicPhaseEvents(box, isReceive=false){
     saveDraft();
   });
 
-  const returnState=$('[data-f="returnPump"]',box), returnPumps=$('[data-return-pumps]',box);   returnState.addEventListener("change",()=>{     returnPumps.classList.toggle("hidden",returnState.value!=="run");     if(isReceive) syncReceiveToHandover();     saveDraft();   });    const boosterItems=$$('input[data-f="booster"]',box);
+  const returnState=$('[data-f="returnPump"]',box), returnPumps=$('[data-return-pumps]',box);
+  returnState.addEventListener("change",()=>{
+    returnPumps.classList.toggle("hidden",returnState.value!=="run");
+    if(isReceive) syncReceiveToHandover();
+    saveDraft();
+  });
+
+  const boosterItems=$$('input[data-f="booster"]',box);
   boosterItems.forEach(el=>el.addEventListener("change",()=>{
     if(el.value==="Không hoạt động" && el.checked){
       boosterItems.forEach(x=>{if(x!==el)x.checked=false});
@@ -595,16 +610,34 @@ function setupDynamicPhaseEvents(box, isReceive=false){
     }
   }));
 
-  $$('input[type="checkbox"]', box).forEach(cb => {     cb.addEventListener("change", () => {       updateCheckboxVisuals(box);       if(isReceive) syncReceiveToHandover();       saveDraft();     });   });    $$
-('select', box).forEach(sel => {
+  $$('input[type="checkbox"]', box).forEach(cb => {
+    cb.addEventListener("change", () => {
+      updateCheckboxVisuals(box);
+      if(isReceive) syncReceiveToHandover();
+      saveDraft();
+    });
+  });
+
+  $$('select', box).forEach(sel => {
     sel.addEventListener("change", () => {
       if(isReceive) syncReceiveToHandover();
       saveDraft();
     });
   });
 
-  $$('[data-decimal]',box).forEach(el=>{     el.addEventListener("change",()=>{       el.value=normalizeDotDecimal(el.value);       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  // Tự động gạch đầu dòng và viết hoa chữ cái đầu cho MỌI dòng $$
-("textarea[data-bullet]").forEach(tx => {
+  $$('[data-decimal]',box).forEach(el=>{
+    el.addEventListener("change",()=>{
+      el.value=normalizeDotDecimal(el.value);
+      saveDraft();
+    });
+  });
+}
+
+setupDynamicPhaseEvents(receivePhase, true);
+setupDynamicPhaseEvents(handoverPhase, false);
+
+// Tự động gạch đầu dòng và viết hoa chữ cái đầu cho MỌI dòng
+$$("textarea[data-bullet]").forEach(tx => {
   tx.addEventListener("focus", () => {
     if(!tx.value.trim()){
       tx.value = "- ";
@@ -710,12 +743,6 @@ function boosterText(p){
   return `đang chạy bơm ${a.join(", ")}`;
 }
 
-function filterText(p){
-  const f=checked(p,"filterUnit");
-  if(!f.length) return "";
-  return `Bộ lọc ${f.join(", ")}`;
-}
-
 function washText(p){
   const st=val(p,"washState");
   if(st!=="run") return "Dừng / Không hoạt động";
@@ -783,8 +810,6 @@ function phaseText(p, isGroup=false){
   if(isChlorineRun){
     lines.push(`- Hệ thống nhà clo: ${chlorineDetail(p) || "Đang chạy"}`);
     lines.push(`- Bơm tăng áp nước biển: ${boosterText(p)}`);
-    const fStr = filterText(p);
-    if(fStr) lines.push(`- Bộ lọc đang dùng: ${fStr}`);
     lines.push(`- Nồng độ châm clo tại kênh 1A/1B/2A/2B: ${vals(p,"ppm").join("/")}`);
   } else {
     lines.push(`- Hệ thống nhà clo: Dừng`);
@@ -900,16 +925,37 @@ function switchTab(targetTab){
   if(targetTab === "handover" && !finalIssuesManualModified && !$("#finalIssues").value.trim()){
     $("#finalIssues").value = $("#issues").value;
   }
-  $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));   $$
-("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
-  if(targetTab === "report") $("#reportText").value = buildMailReport();      // Tự động cuộn lên đầu tức thì khi chuyển tab   window.scrollTo(0, 0); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));
+  $$("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
+  if(targetTab === "report") $("#reportText").value = buildMailReport();
+  
+  // Tự động cuộn lên đầu tức thì khi chuyển tab
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+$$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
   switchTab(btn.dataset.tab);
 }));
 
 function serializePhase(p){
   const obj={};
-  $$("[data-f]",p).forEach((e)=>{     const key=e.dataset.f;     if(e.type==="checkbox"){       if(!obj[key]) obj[key]=[];       if(e.checked) obj[key].push(e.value);     }else{       if(obj[key]===undefined) obj[key]=e.value;       else if(Array.isArray(obj[key])) obj[key].push(e.value);       else obj[key]=[obj[key],e.value];     }   });   return obj; }  function restorePhase(p,obj={}){   const groups={};   $$
-("[data-f]",p).forEach(e=>(groups[e.dataset.f]??=[]).push(e));
+  $$("[data-f]",p).forEach((e)=>{
+    const key=e.dataset.f;
+    if(e.type==="checkbox"){
+      if(!obj[key]) obj[key]=[];
+      if(e.checked) obj[key].push(e.value);
+    }else{
+      if(obj[key]===undefined) obj[key]=e.value;
+      else if(Array.isArray(obj[key])) obj[key].push(e.value);
+      else obj[key]=[obj[key],e.value];
+    }
+  });
+  return obj;
+}
+
+function restorePhase(p,obj={}){
+  const groups={};
+  $$("[data-f]",p).forEach(e=>(groups[e.dataset.f]??=[]).push(e));
   Object.entries(groups).forEach(([key,els])=>{
     if(!(key in obj)) return;
     if(els[0].type==="checkbox"){
@@ -969,12 +1015,14 @@ window.addEventListener("pagehide", saveDraft);
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
   
-  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;    $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
-  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");   $$
-(".phase select").forEach(sel => sel.selectedIndex = 0);
+  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;
+
+  $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
+  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");
+  $$(".phase select").forEach(sel => sel.selectedIndex = 0);
   
-  $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");   $$
-('[data-f="oil"]', handoverPhase).forEach(el => el.value = "190");
+  $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");
+  $$('[data-f="oil"]', handoverPhase).forEach(el => el.value = "190");
 
   $("#previousAbnormal").value = "";
   
