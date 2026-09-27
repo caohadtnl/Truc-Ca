@@ -31,7 +31,6 @@ body{margin:0}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 
-/* 1. THANH TIÊU ĐỀ TOPBAR */
 .topbar{
   height:44px;
   background:var(--orange-header);
@@ -50,7 +49,6 @@ button{cursor:pointer}
 
 .app{max-width:980px;margin:0 auto;padding:6px 10px 80px}
 
-/* 2. THANH TAB ĐÓNG BĂNG */
 .tabs{
   display:flex;
   gap:6px;
@@ -86,7 +84,6 @@ button{cursor:pointer}
   box-shadow:0 2px 6px rgba(234,88,12,0.3);
 }
 
-/* Thẻ chứa nội dung */
 .card{
   background:var(--card);
   border:1px solid #fed7aa;
@@ -98,13 +95,11 @@ button{cursor:pointer}
 .card-title{font-size:16px;font-weight:800;margin:0 0 12px;color:#1e293b}
 .section-label{font-size:12.5px;color:var(--muted);font-weight:700;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.03em}
 
-/* Lưới hiển thị */
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .cwp-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 
-/* Nút tick CWP & Thiết bị */
 .choice-cwp{
   display:flex;align-items:center;justify-content:center;gap:5px;
   border:1.5px solid var(--line);background:white;border-radius:10px;
@@ -132,7 +127,6 @@ button{cursor:pointer}
 
 label.field{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;font-weight:600}
 
-/* Định dạng Input, Select, Textarea */
 input:not([type="checkbox"]), select, textarea{
   width:100%;
   max-width:100%;
@@ -161,7 +155,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .metric{margin-top:10px}
 .sub-panel{background:var(--soft);padding:11px;border-radius:10px;border:1px dashed #fdba74;margin-top:8px}
 .head4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
-.num4 input{text-align:center;padding-left:1px;padding-right:1px;font-size:16px}
+.num4 input{text-align:center;padding-left:1px;padding-right:1px;font-size:15px!important}
 
 .btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:8px 12px;font-weight:700;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
 .btn.primary{background:var(--orange-brand);border-color:var(--orange-brand);color:white}
@@ -173,7 +167,6 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .btn-reset-span{grid-column:1/-1}
 
-/* Màn hình khóa xác thực mật khẩu */
 #loginOverlay{
   position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:9999;
   display:flex;align-items:center;justify-content:center;padding:16px;
@@ -194,7 +187,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
  .grid4{gap:4px}
  .cwp-row{gap:4px}
  .choice-cwp{font-size:12px;padding:7px 1px}
- .num4 input{font-size:16px!important;padding:8px 0}
+ .num4 input{font-size:15px!important;padding:8px 1px}
  .card{padding:12px}
  .btn{font-size:14px}
 }
@@ -323,7 +316,6 @@ const app = document.getElementById('app');
 const APP_PASS = "Ndqt1hacn";
 const AUTH_KEY = "qt_shift_auth_state";
 
-// Xác thực mật khẩu
 const loginOverlay = document.getElementById('loginOverlay');
 const appPass = document.getElementById('appPass');
 const btnLogin = document.getElementById('btnLogin');
@@ -368,8 +360,7 @@ const STORE_KEY = "qt_shift_report_v15";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
 
-const $ = (s, el=app) => el.querySelector(s);
-const $$ = (s, el=app) => [...el.querySelectorAll(s)];
+const $ = (s, el=app) => el.querySelector(s); const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
 function phaseHTML(title){
 return `
@@ -462,7 +453,13 @@ return `
       <div><label class="field">Bộ định lượng</label><div class="checks">${["A","B","C","D"].map(x=>`<label class="choice"><input type="checkbox" data-f="meter" value="${x}">${x}</label>`).join("")}</div></div>
       <div><label class="field">Xả xuống kênh</label><div class="checks">${U.map(x=>`<label class="choice"><input type="checkbox" data-f="channel" value="${x}">${x}</label>`).join("")}</div></div>
       <div style="grid-column:1/-1"><label class="field">Bơm tăng áp nước biển</label><div class="checks">${["A","B","C","D","Không hoạt động"].map(x=>`<label class="choice"><input type="checkbox" data-f="booster" value="${x}">${x}</label>`).join("")}</div></div>
-      <div style="grid-column:1/-1"><label class="field">Bộ lọc nước biển A/B</label><div class="checks">${["A","B"].map(x=>`<label class="choice"><input type="checkbox" data-f="boosterFilter" value="${x}">${x}</label>`).join("")}</div></div>
+      <div style="grid-column:1/-1">
+        <label class="field">Bộ lọc nước biển A/B</label>
+        <div class="checks">
+          <label class="choice"><input type="checkbox" data-f="seaFilter" value="A">A</label>
+          <label class="choice"><input type="checkbox" data-f="seaFilter" value="B">B</label>
+        </div>
+      </div>
     </div>
     <div class="metric">
       <label class="field">Nồng độ châm clo 1A/1B/2A/2B (ppm)</label>
@@ -512,15 +509,7 @@ $("#receiveMount").innerHTML = phaseHTML("2. Tình trạng thiết bị đầu c
 $("#handoverMount").innerHTML = phaseHTML("III. Giao ca");
 
 const receivePhase = $("#receiveMount .phase");
-const handoverPhase = $("#handoverMount .phase");
-
-function normalizeDotDecimal(v){
-  let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");
-  const first = s.indexOf(".");
-  if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");
-  return s;
-}
-function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value))}
+const handoverPhase = $("#handoverMount .phase");  function normalizeDotDecimal(v){   let s = String(v ?? "").trim().replace(/,/g,".").replace(/[^0-9.\-]/g,"");   const first = s.indexOf(".");   if(first !== -1) s = s.slice(0,first+1) + s.slice(first+1).replace(/\./g,"");   return s; } function vals(box,f){return $$(`[data-f="${f}"]`,box).map(e=>normalizeDotDecimal(e.value))}
 function val(box,f){const e=$(`[data-f="${f}"]`,box);return e ? e.value.trim().replace(/,/g,".") : ""}
 function checked(box,f){return $$(`input[data-f="${f}"]:checked`,box).map(e=>e.value)}
 
@@ -531,27 +520,7 @@ function updateCheckboxVisuals(box){
   });
 }
 
-function syncReceiveToHandover(){
-  const srcEls = $$("input, select", receivePhase);
-  const dstEls = $$("input, select", handoverPhase);
-  
-  srcEls.forEach((s, i) => {
-    const d = dstEls[i];
-    if(!d) return;
-    const f = d.dataset.f;
-    if(["level", "dis", "hp", "temp"].includes(f)){
-      d.value = "";
-    } else if(f === "oil") {
-      d.value = "190";
-    } else {
-      if(s.type === "checkbox") d.checked = s.checked;
-      else d.value = s.value;
-    }
-    d.dispatchEvent(new Event("input", {bubbles:true}));
-  });
-
-  updateCheckboxVisuals(handoverPhase);
-
+function updatePanelVisibility(p){
   [
     ['[data-f="screen"]', '[data-screen-units]', 'run'],
     ['[data-f="washState"]', '[data-wash-details]', 'run'],
@@ -559,49 +528,61 @@ function syncReceiveToHandover(){
     ['[data-f="neutral"]', '[data-neutral-fan]', 'run'],
     ['[data-f="returnPump"]', '[data-return-pumps]', 'run']
   ].forEach(([sel, target, activeVal]) => {
-    const s = $(sel, handoverPhase);
-    const t = $(target, handoverPhase);
+    const s = $(sel, p);
+    const t = $(target, p);
     if(s && t) t.classList.toggle("hidden", s.value !== activeVal);
   });
 }
 
+function syncReceiveToHandover(){
+  const srcEls = $$("input, select", receivePhase);   const dstEls = $$("input, select", handoverPhase);
+  
+  srcEls.forEach((s, i) => {
+    const d = dstEls[i];
+    if(!d) return;
+    const f = d.dataset.f;
+    if(["level", "dis", "hp", "temp", "ppm", "tankA", "tankB", "naoh", "washPressure"].includes(f)){
+      return;
+    }
+    if(s.type === "checkbox") d.checked = s.checked;
+    else d.value = s.value;
+  });
+
+  updateCheckboxVisuals(handoverPhase);
+  updatePanelVisibility(handoverPhase);
+  saveDraft();
+}
+
 function setupDynamicPhaseEvents(box, isReceive=false){
-  const screenState=$('[data-f="screen"]',box), screenUnits=$('[data-screen-units]',box);
+  const screenState=$('[data-f="screen"]',box);
   screenState.addEventListener("change",()=>{
-    screenUnits.classList.toggle("hidden",screenState.value!=="run");
+    updatePanelVisibility(box);
     if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const washState=$('[data-f="washState"]',box), washDetails=$('[data-wash-details]',box);
+  const washState=$('[data-f="washState"]',box);
   washState.addEventListener("change",()=>{
-    washDetails.classList.toggle("hidden",washState.value!=="run");
+    updatePanelVisibility(box);
     if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const chlorineState=$('[data-f="chlorineState"]',box), chlorineActive=$('[data-chlorine-active]',box);
+  const chlorineState=$('[data-f="chlorineState"]',box);
   chlorineState.addEventListener("change",()=>{
-    chlorineActive.classList.toggle("hidden",chlorineState.value!=="run");
+    updatePanelVisibility(box);
     if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const neutralState=$('[data-f="neutral"]',box), neutralFan=$('[data-neutral-fan]',box);
+  const neutralState=$('[data-f="neutral"]',box);
   neutralState.addEventListener("change",()=>{
-    neutralFan.classList.toggle("hidden",neutralState.value!=="run");
+    updatePanelVisibility(box);
     if(isReceive) syncReceiveToHandover();
     saveDraft();
   });
 
-  const returnState=$('[data-f="returnPump"]',box), returnPumps=$('[data-return-pumps]',box);
-  returnState.addEventListener("change",()=>{
-    returnPumps.classList.toggle("hidden",returnState.value!=="run");
-    if(isReceive) syncReceiveToHandover();
-    saveDraft();
-  });
-
-  const boosterItems=$$('input[data-f="booster"]',box);
+  const returnState=$('[data-f="returnPump"]',box);   returnState.addEventListener("change",()=>{     updatePanelVisibility(box);     if(isReceive) syncReceiveToHandover();     saveDraft();   });    const boosterItems=$$('input[data-f="booster"]',box);
   boosterItems.forEach(el=>el.addEventListener("change",()=>{
     if(el.value==="Không hoạt động" && el.checked){
       boosterItems.forEach(x=>{if(x!==el)x.checked=false});
@@ -609,36 +590,21 @@ function setupDynamicPhaseEvents(box, isReceive=false){
       const none=boosterItems.find(x=>x.value==="Không hoạt động");
       if(none) none.checked=false;
     }
+    updateCheckboxVisuals(box);
+    if(isReceive) syncReceiveToHandover();
+    saveDraft();
   }));
 
-  $$('input[type="checkbox"]', box).forEach(cb => {
-    cb.addEventListener("change", () => {
-      updateCheckboxVisuals(box);
-      if(isReceive) syncReceiveToHandover();
-      saveDraft();
-    });
-  });
-
-  $$('select', box).forEach(sel => {
+  $$('input[type="checkbox"]', box).forEach(cb => {     cb.addEventListener("change", () => {       updateCheckboxVisuals(box);       if(isReceive) syncReceiveToHandover();       saveDraft();     });   });    $$
+('select', box).forEach(sel => {
     sel.addEventListener("change", () => {
       if(isReceive) syncReceiveToHandover();
       saveDraft();
     });
   });
 
-  $$('[data-decimal]',box).forEach(el=>{
-    el.addEventListener("change",()=>{
-      el.value=normalizeDotDecimal(el.value);
-      saveDraft();
-    });
-  });
-}
-
-setupDynamicPhaseEvents(receivePhase, true);
-setupDynamicPhaseEvents(handoverPhase, false);
-
-// Tự động gạch đầu dòng và viết hoa chữ cái đầu cho MỌI dòng
-$$("textarea[data-bullet]").forEach(tx => {
+  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", saveDraft);     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  $$
+("textarea[data-bullet]").forEach(tx => {
   tx.addEventListener("focus", () => {
     if(!tx.value.trim()){
       tx.value = "- ";
@@ -653,24 +619,11 @@ $$("textarea[data-bullet]").forEach(tx => {
       const after = tx.value.substring(tx.selectionEnd);
       tx.value = before + "\n- " + after;
       tx.selectionStart = tx.selectionEnd = pos + 3;
+      saveDraft();
     }
   });
 
-  tx.addEventListener("input", () => {
-    const pos = tx.selectionStart;
-    const original = tx.value;
-    
-    const updated = original.replace(/(^|\n)(-\s+)([a-zà-ỹ])/g, (m, p1, p2, p3) => {
-      return p1 + p2 + p3.toUpperCase();
-    });
-
-    if (original !== updated) {
-      tx.value = updated;
-      tx.setSelectionRange(pos, pos);
-    }
-  });
-
-  tx.addEventListener("change", saveDraft);
+  tx.addEventListener("input", saveDraft);
 });
 
 $("#finalIssues").addEventListener("input", () => {
@@ -699,10 +652,9 @@ $("#shift").addEventListener("change",()=>{syncShift();saveDraft()});
 $("#kip").addEventListener("change",()=>{syncRoster(true);saveDraft()});
 $("#receiveKip").addEventListener("change",()=>{syncReceiveRoster();saveDraft()});
 ["#workDate","#staff","#handoverPeople","#receivePeople"].forEach(s=>{
-  $(s).addEventListener("change",saveDraft);
+  $(s).addEventListener("input",saveDraft);
 });
 
-// Tự động kế thừa Mục 4 sang Mục IV
 $("#issues").addEventListener("input", () => {
   if(!finalIssuesManualModified){
     $("#finalIssues").value = $("#issues").value;
@@ -710,10 +662,11 @@ $("#issues").addEventListener("input", () => {
 });
 
 function cleanBulletText(text, compact=false){
-  const arr = String(text||"").split(/\n+/).map(x=>x.trim()).filter(x => x && x !== "-");
+  const arr = String(text||"").split(/\n+/).map(x=>x.trim());
+  const valid = arr.filter(x => x.replace(/^[-•*]\s*/, "").trim().length > 0);
   const sep = compact ? "\n" : "\n\n";
-  return arr.map(x => {
-    let clean = x.replace(/^[-•*]\s*/, "");
+  return valid.map(x => {
+    let clean = x.replace(/^[-•*]\s*/, "").trim();
     if(clean.length > 0){
       clean = clean.charAt(0).toUpperCase() + clean.slice(1);
     }
@@ -744,16 +697,9 @@ function boosterText(p){
   return `đang chạy bơm ${a.join(", ")}`;
 }
 
-function boosterFilterText(p){
-  const a=checked(p,"boosterFilter");
-
-  if(!a.length) return "Không hoạt động";
-
-  if(a.length === 2 && a.includes("A") && a.includes("B")){
-    return "Đang chạy bộ lọc A và B";
-  }
-
-  return `Đang chạy bộ lọc ${a[0]}`;
+function seaFilterText(p){
+  const f=checked(p,"seaFilter");
+  return f.length ? `Lọc ${f.join(", ")}` : "Đang dừng";
 }
 
 function washText(p){
@@ -823,7 +769,7 @@ function phaseText(p, isGroup=false){
   if(isChlorineRun){
     lines.push(`- Hệ thống nhà clo: ${chlorineDetail(p) || "Đang chạy"}`);
     lines.push(`- Bơm tăng áp nước biển: ${boosterText(p)}`);
-    lines.push(`- Bộ lọc: ${boosterFilterText(p)}`);
+    lines.push(`- Bộ lọc nước biển A/B: ${seaFilterText(p)}`);
     lines.push(`- Nồng độ châm clo tại kênh 1A/1B/2A/2B: ${vals(p,"ppm").join("/")}`);
   } else {
     lines.push(`- Hệ thống nhà clo: Dừng`);
@@ -833,10 +779,13 @@ function phaseText(p, isGroup=false){
 `- Hệ thống trung hòa clo: ${neutralText(p)}`,
 `- Khối lượng NaOH trong bể chứa: ${naohStr}`,
 `- Hệ thống bơm nước hồi: ${returnPumpText(p)}`,
-`- Mức bể nước thu hồi A/B: ${tankStr}`,
-`- Tổng số bình Clo: ${totalCyl}`,
-`- Tổng số bình Clo khả dụng: ${remainCyl}`
+`- Mức bể nước thu hồi A/B: ${tankStr}`
   );
+
+  if(totalCyl || remainCyl){
+    lines.push(`- Tổng số bình Clo: ${totalCyl || "0"}`);
+    lines.push(`- Tổng số bình Clo khả dụng: ${remainCyl || "0"}`);
+  }
 
   return lines.join(isGroup ? "\n" : "\n\n");
 }
@@ -893,12 +842,12 @@ Trân trọng./.`;
 }
 
 function buildGroupReport(){
-  const [shiftName]= $("#shift").value.split("|");
+  const [shiftName, shiftHour]= $("#shift").value.split("|");
   const prev=cleanBulletText($("#previousAbnormal").value, true);
   const issues=cleanBulletText($("#issues").value, true);
   const staff=$("#staff").value.trim();
 
-  return `Báo cáo TC, TKLM, MT: Tình hình thiết bị vận hành HV Trạm tuần hoàn, clo - Trạm nước lắng , hồi (Kíp ${$("#kip").value}) đầu ca ${shiftName} ngày ${vnDate($("#workDate").value)} (từ ${$("#shiftTime").value}) như sau:
+  return `Báo cáo TC, TKLM, MT: Tình hình thiết bị vận hành HV Trạm tuần hoàn, clo - Trạm nước lắng , hồi (Kíp ${$("#kip").value}) đầu ca ${shiftName} ngày ${vnDate($("#workDate").value)} (từ ${shiftHour}) như sau:
 I. Nhận ca:
 1. Nhân sự: ${staff}
 2. Tình trạng thiết bị đầu ca:
@@ -911,16 +860,27 @@ ${issues}`;
 
 async function copyText(text, msg){
   saveDraft();
-  let ok=false;
+  let ok = false;
   try{
-    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); ok=true; }
+    if(navigator.clipboard && window.isSecureContext){ 
+      await navigator.clipboard.writeText(text); 
+      ok = true; 
+    }
   }catch(e){}
+  
   if(!ok){
-    $("#reportText").value = text;
-    $("#reportText").focus(); $("#reportText").select();
-    try{ ok=document.execCommand("copy"); }catch(e){}
+    const rt = $("#reportText");
+    rt.value = text;
+    rt.removeAttribute("readonly");
+    rt.focus();
+    rt.select();
+    rt.setSelectionRange(0, 999999);
+    try { 
+      ok = document.execCommand("copy"); 
+    } catch(e){}
+    rt.setAttribute("readonly", true);
   }
-  $("#status").textContent=ok ? msg : "Đã chọn toàn bộ nội dung — hãy chọn Copy.";
+  $("#status").textContent = ok ? msg : "Đã chọn toàn bộ nội dung — hãy bấm Copy.";
 }
 
 $("#copyMailReport").addEventListener("click",async()=>{
@@ -936,52 +896,37 @@ $("#copyGroupReport").addEventListener("click",async()=>{
 });
 
 function switchTab(targetTab){
-  if(targetTab === "handover" && !finalIssuesManualModified && !$("#finalIssues").value.trim()){
-    $("#finalIssues").value = $("#issues").value;
-  }
-  $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));
-  $$("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
-  if(targetTab === "report") $("#reportText").value = buildMailReport();
-  
-  // Tự động cuộn lên đầu tức thì khi chuyển tab
-  window.scrollTo({ top: 0, behavior: "instant" });
-}
-
-$$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));   $$
+("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
+  if(targetTab === "report") $("#reportText").value = buildMailReport();   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
   switchTab(btn.dataset.tab);
 }));
 
 function serializePhase(p){
-  const obj={};
-  $$("[data-f]",p).forEach((e)=>{
-    const key=e.dataset.f;
-    if(e.type==="checkbox"){
-      if(!obj[key]) obj[key]=[];
-      if(e.checked) obj[key].push(e.value);
-    }else{
-      if(obj[key]===undefined) obj[key]=e.value;
-      else if(Array.isArray(obj[key])) obj[key].push(e.value);
-      else obj[key]=[obj[key],e.value];
-    }
+  const obj = {};
+  const groups = {};
+  $$("[data-f]", p).forEach(e => {     const key = e.dataset.f;     (groups[key] ??= []).push(e);   });    for(const [key, els] of Object.entries(groups)){     if(els[0].type === "checkbox"){       obj[key] = els.filter(x => x.checked).map(x => x.value);     } else if(els.length === 1){       obj[key] = els[0].value;     } else {       obj[key] = els.map(x => x.value);     }   }   return obj; }  function restorePhase(p, obj = {}){   if(!obj) return;   const groups = {};   $$
+("[data-f]", p).forEach(e => {
+    const key = e.dataset.f;
+    (groups[key] ??= []).push(e);
   });
-  return obj;
-}
 
-function restorePhase(p,obj={}){
-  const groups={};
-  $$("[data-f]",p).forEach(e=>(groups[e.dataset.f]??=[]).push(e));
-  Object.entries(groups).forEach(([key,els])=>{
-    if(!(key in obj)) return;
-    if(els[0].type==="checkbox"){
-      const arr=Array.isArray(obj[key])?obj[key]:[];
-      els.forEach(e=>e.checked=arr.includes(e.value));
-    }else{
-      const v=obj[key];
-      if(Array.isArray(v)) els.forEach((e,i)=>{if(v[i]!==undefined)e.value=v[i]});
-      else if(els[0]) els[0].value=v;
+  for(const [key, els] of Object.entries(groups)){
+    if(!(key in obj)) continue;
+    const val = obj[key];
+    if(els[0].type === "checkbox"){
+      const arr = Array.isArray(val) ? val : [];
+      els.forEach(e => e.checked = arr.includes(e.value));
+    } else if(Array.isArray(val)){
+      els.forEach((e, i) => {
+        if(val[i] !== undefined) e.value = val[i];
+      });
+    } else {
+      if(els[0]) els[0].value = val ?? "";
     }
-  });
+  }
   updateCheckboxVisuals(p);
+  updatePanelVisibility(p);
 }
 
 function saveDraft(){
@@ -1006,16 +951,17 @@ function loadDraft(){
     if(d.workDate) $("#workDate").value=d.workDate;
     if(d.kip) $("#kip").value=d.kip;
     if(d.shift) $("#shift").value=d.shift;
-    $("#staff").value=d.staff||"";
-    $("#previousAbnormal").value=d.previousAbnormal||"";
-    $("#issues").value = d.issues || "";
-    $("#duringText").value=(d.duringText !== undefined && d.duringText !== "") ? d.duringText : DEFAULT_DURING_TEXT;
-    $("#finalIssues").value=d.finalIssues||"";
+    if(d.staff) $("#staff").value=d.staff;
+    if(d.previousAbnormal) $("#previousAbnormal").value=d.previousAbnormal;
+    if(d.issues) $("#issues").value = d.issues;
+    if(d.duringText !== undefined) $("#duringText").value = d.duringText;
+    if(d.finalIssues) $("#finalIssues").value=d.finalIssues;
     finalIssuesManualModified = d.finalIssuesManualModified === true;
-    $("#handoverPeople").value=d.handoverPeople||"";
-    $("#receiveKip").value=d.receiveKip||"";
-    $("#receivePeople").value=d.receivePeople||"";
-    restorePhase(receivePhase,d.receive); restorePhase(handoverPhase,d.handover);
+    if(d.handoverPeople) $("#handoverPeople").value=d.handoverPeople;
+    if(d.receiveKip) $("#receiveKip").value=d.receiveKip;
+    if(d.receivePeople) $("#receivePeople").value=d.receivePeople;
+    restorePhase(receivePhase,d.receive); 
+    restorePhase(handoverPhase,d.handover);
     return true;
   }catch(e){return false}
 }
@@ -1025,18 +971,15 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", saveDraft);
 
-// Bắt đầu ca mới (Giữ lại Tồn tại thiết bị)
 $("#newShift").addEventListener("click",()=>{
   if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
   
-  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;
-
-  $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
-  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");
-  $$(".phase select").forEach(sel => sel.selectedIndex = 0);
+  const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;    $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
+  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");   $$
+(".phase select").forEach(sel => sel.selectedIndex = 0);
   
-  $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");
-  $$('[data-f="oil"]', handoverPhase).forEach(el => el.value = "190");
+  $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");   $$
+('[data-f="oil"]', handoverPhase).forEach(el => el.value = "190");
 
   $("#previousAbnormal").value = "";
   
@@ -1058,30 +1001,23 @@ $("#newShift").addEventListener("click",()=>{
 
   [receivePhase, handoverPhase].forEach(p => {
     updateCheckboxVisuals(p);
-    $('[data-f="screen"]', p).dispatchEvent(new Event("change"));
-    $('[data-f="washState"]', p).dispatchEvent(new Event("change"));
-    $('[data-f="chlorineState"]', p).dispatchEvent(new Event("change"));
-    $('[data-f="neutral"]', p).dispatchEvent(new Event("change"));
-    $('[data-f="returnPump"]', p).dispatchEvent(new Event("change"));
+    updatePanelVisibility(p);
   });
 
   saveDraft();
-
   switchTab("general");
 });
 
-loadDraft();
+const hasDraft = loadDraft();
 setCurrentDateIfEmpty();
 syncShift();
-syncRoster(false);
+if(!hasDraft){
+  syncRoster(false);
+}
 
 [receivePhase, handoverPhase].forEach(p => {
   updateCheckboxVisuals(p);
-  $('[data-f="screen"]', p).dispatchEvent(new Event("change"));
-  $('[data-f="washState"]', p).dispatchEvent(new Event("change"));
-  $('[data-f="chlorineState"]', p).dispatchEvent(new Event("change"));
-  $('[data-f="neutral"]', p).dispatchEvent(new Event("change"));
-  $('[data-f="returnPump"]', p).dispatchEvent(new Event("change"));
+  updatePanelVisibility(p);
 });
 })();
 </script>
