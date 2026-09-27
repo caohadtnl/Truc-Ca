@@ -156,6 +156,15 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .sub-panel{background:var(--soft);padding:11px;border-radius:10px;border:1px dashed #fdba74;margin-top:8px}
 .head4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
 .num4 input{text-align:center;padding-left:1px;padding-right:1px;font-size:15px!important}
+.alarm-cell{min-width:0}
+.alarm-status{margin-top:5px;padding:5px 7px;border-radius:8px;font-size:11.5px;font-weight:800;line-height:1.25;text-align:center;cursor:pointer;user-select:none}
+.alarm-normal{color:#166534;background:#dcfce7}
+.alarm-warning{color:#92400e;background:#fef3c7}
+.alarm-trip{color:#991b1b;background:#fee2e2}
+.alarm-group-detail{display:none;margin-top:6px;padding:8px 10px;border-radius:9px;background:#fff;border:1px solid #e2e8f0;color:#475569;font-size:11px;font-weight:600;line-height:1.45;text-align:left}
+.alarm-group-detail.open{display:block}
+.alarm-group-detail .alarm-rule{display:block;margin:2px 0}
+.alarm-clickable{cursor:pointer}
 
 .btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:8px 12px;font-weight:700;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
 .btn.primary{background:var(--orange-brand);border-color:var(--orange-brand);color:white}
@@ -375,7 +384,7 @@ return `
   <div class="metric">
     <label class="field">Mức nước đầu kênh 1A/1B/2A/2B (m)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="level">`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="level"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="level" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="level"></div>
   </div>
 
   <div class="section-label">Lưới chắn rác</div>
@@ -418,22 +427,22 @@ return `
   <div class="metric">
     <label class="field">Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="dis">`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="dis"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="dis" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="dis"></div>
   </div>
   <div class="metric">
     <label class="field">Áp suất dầu thủy lực van CNRV 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="hp">`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="hp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="hp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="hp"></div>
   </div>
   <div class="metric">
     <label class="field">Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B (°C)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="temp">`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="temp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="temp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="temp"></div>
   </div>
   <div class="metric">
     <label class="field">Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B (Lít)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(()=>`<input inputmode="decimal" data-decimal data-f="oil" value="190">`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="oil" value="190"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="oil" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="oil"></div>
   </div>
   <div class="metric">
     <label class="field">Bơm dầu thủy lực van CNRV 1A/1B/2A/2B</label>
@@ -488,7 +497,7 @@ return `
         </div>
       </div>
     </div>
-    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"></div>
+    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="naoh">🟢 BÌNH THƯỜNG</div><div class="alarm-group-detail" data-alarm-group="naoh"></div></div>
     <div>
       <label class="field">Hệ thống bơm nước hồi</label>
       <select data-f="returnPump"><option value="stop">Ngừng</option><option value="run">Đang chạy</option></select>
@@ -553,6 +562,105 @@ function syncReceiveToHandover(){
   saveDraft();
 }
 
+function alarmNumber(v){
+  const n=parseFloat(normalizeDotDecimal(v));
+  return Number.isFinite(n) ? n : null;
+}
+function alarmResult(type, raw){
+  const n=alarmNumber(raw);
+  if(n===null) return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  if(type==="level") {
+    if(n<8.42) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  }
+  if(type==="dis") {
+    if(n<0.2) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    if(n>0.3) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  }
+  if(type==="hp") {
+    if(n<8.5 || n>18) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n<14) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    if(n>16) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  }
+  if(type==="temp") {
+    if(n>80) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n>70) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  }
+  if(type==="oil") {
+    if(n<75) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n<100) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  }
+  if(type==="naoh") {
+    if(n<450 || n>2460) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n<600) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    if(n>2360) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+  }
+  return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+}
+function alarmGroupHTML(type){
+  const rows={
+    level:[
+      ["normal","🟢 Bình thường","≥8,42 m"],
+      ["trip","🔴 Trip hệ thống","<8,42 m → Ngừng bơm CWP"]
+    ],
+    dis:[
+      ["normal","🟢 Bình thường","0,20–0,30 MPa"],
+      ["warning","🟠 Cảnh báo – thấp","<0,20 MPa → Kiểm tra tình trạng bơm và hệ thống"],
+      ["warning","🟠 Cảnh báo – cao",">0,30 MPa → Kiểm tra tình trạng bơm và hệ thống"]
+    ],
+    hp:[
+      ["normal","🟢 Bình thường","14,0–16,0 MPa"],
+      ["warning","🟠 Cảnh báo – thấp","<14,0 MPa → Tự động khởi động bơm dầu"],
+      ["warning","🟠 Cảnh báo – cao",">16,0 MPa → Tự động dừng bơm dầu"],
+      ["trip","🔴 Trip hệ thống","<8,5 hoặc >18,0 MPa → Trip hệ thống"]
+    ],
+    temp:[
+      ["normal","🟢 Bình thường","≤70 °C"],
+      ["warning","🟠 Cảnh báo – cao",">70 °C → Kiểm tra nhiệt độ dầu thủy lực"],
+      ["trip","🔴 Trip hệ thống",">80 °C → Trip hệ thống"]
+    ],
+    oil:[
+      ["normal","🟢 Bình thường","≥100 L (mức làm việc khoảng 190 L)"],
+      ["warning","🟠 Cảnh báo – thấp","<100 L → Kiểm tra/bổ sung dầu thủy lực"],
+      ["trip","🔴 Trip hệ thống","<75 L → Trip hệ thống"]
+    ],
+    naoh:[
+      ["normal","🟢 Bình thường","600–2360 mm"],
+      ["warning","🟠 Cảnh báo – thấp","<600 mm → Alarm L"],
+      ["warning","🟠 Cảnh báo – cao",">2360 mm → Alarm H"],
+      ["trip","🔴 Alarm LL","<450 mm → Dừng bơm nhập/cấp NaOH và bơm tuần hoàn NaOH"],
+      ["trip","🔴 Alarm HH",">2460 mm → Dừng bơm nhập và cấp NaOH"]
+    ]
+  };
+  return (rows[type]||[]).map(r=>`<span class="alarm-rule"><strong>${r[1]}</strong>: ${r[2]}</span>`).join("");
+}
+function updateAlarmStatus(box){
+  ["level","dis","hp","temp","oil","naoh"].forEach(type=>{
+    const inputs=$$(`[data-f="${type}"]`,box);
+    const statuses=$$(`[data-alarm-status="${type}"]`,box);
+    inputs.forEach((input,i)=>{
+      const st=statuses[i] || statuses[0]; if(!st) return;
+      const r=alarmResult(type,input.value);
+      st.className=`alarm-status alarm-${r.kind} alarm-clickable`;
+      st.textContent=r.label;
+    });
+    const detail=$(`[data-alarm-group="${type}"]`,box);
+    if(detail) detail.innerHTML=alarmGroupHTML(type);
+  });
+}
+function bindAlarmClicks(box){
+  $$('[data-alarm-status]',box).forEach(st=>st.addEventListener("click",()=>{
+    const type=st.dataset.alarmStatus;
+    const detail=$(`[data-alarm-group="${type}"]`,box);
+    if(detail) detail.classList.toggle("open");
+  }));
+}
+
 function setupDynamicPhaseEvents(box, isReceive=false){
   const screenState=$('[data-f="screen"]',box);
   screenState.addEventListener("change",()=>{
@@ -603,7 +711,7 @@ function setupDynamicPhaseEvents(box, isReceive=false){
     });
   });
 
-  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", saveDraft);     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  $$
+  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", () => { updateAlarmStatus(box); saveDraft(); });     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       updateAlarmStatus(box);       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false); bindAlarmClicks(receivePhase); bindAlarmClicks(handoverPhase); updateAlarmStatus(receivePhase); updateAlarmStatus(handoverPhase);  $$
 ("textarea[data-bullet]").forEach(tx => {
   tx.addEventListener("focus", () => {
     if(!tx.value.trim()){
@@ -755,7 +863,7 @@ function phaseText(p, isGroup=false){
 
   const lines = [
 `- Hệ thống bơm tuần hoàn: ${cwpStr}`,
-`- Mức nước đầu kênh 1A/1B/2A/2B: ${vals(p,"level").join("/")}m`,
+`- Mức nước đầu kênh 1A/1B/2A/2B: ${vals(p,"level").map(v=>v ? v.replace(".",",") : v).join("/")} m`,
 `- Tình trạng hoạt động của lưới quay: ${screen}`,
 `- Tình trạng hoạt động của bơm rửa lưới: ${washText(p)}`,
 `- Tình trạng hoạt động của máy cào rác: ${val(p,"rake")}`,
@@ -927,6 +1035,7 @@ function serializePhase(p){
   }
   updateCheckboxVisuals(p);
   updatePanelVisibility(p);
+  updateAlarmStatus(p);
 }
 
 function saveDraft(){
@@ -1002,6 +1111,18 @@ $("#newShift").addEventListener("click",()=>{
   [receivePhase, handoverPhase].forEach(p => {
     updateCheckboxVisuals(p);
     updatePanelVisibility(p);
+    // Reset toàn bộ trạng thái cảnh báo/chi tiết của ca trước.
+    $$('[data-alarm-status]', p).forEach(st => {
+      st.classList.remove("open");
+      st.className = "alarm-status alarm-normal";
+      st.textContent = "🟢 BÌNH THƯỜNG";
+    });
+    $$('[data-alarm-detail]', p).forEach(d => {
+      d.classList.remove("open");
+      d.textContent = "";
+    });
+    $$('[data-alarm-group]', p).forEach(d => d.classList.remove("open"));
+    if(typeof updateAlarmStatus === "function") updateAlarmStatus(p);
   });
 
   saveDraft();
